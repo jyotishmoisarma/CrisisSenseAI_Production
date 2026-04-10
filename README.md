@@ -57,7 +57,7 @@ G. Workflow: (Basic or starting way)
 1. User provides image/text/audio
 2. Image is analyzed
 3. Audio converted to text
-4. Context is built
+4. Context is builtCopilot: Enable
 5. AI processes data
 6. Response generated
 7. Output displayed with actions

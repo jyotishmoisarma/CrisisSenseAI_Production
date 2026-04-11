@@ -3,7 +3,7 @@
                                     CURRENT TEAM
                                     1. Md Raj Islam (Full Stack/UX)
                                     2. Jyotismoi Sharma (Backend)
-                                    3. Arnaz Begum (Frontend/UI/UX) 
+                                    3. Arnaz S. Hussain (Frontend/UI/UX) 
 
 
 

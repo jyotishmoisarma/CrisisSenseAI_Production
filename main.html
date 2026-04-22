@@ -4,15 +4,287 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>CRISI AI</title>
-   <link rel="stylesheet" href="FRONTEND/style.css">
+   <title>Crisis_AI Dashboard</title>
+   <link rel="stylesheet" href="frontend/style.css">
+   <script src="frontend/api.js"></script>
 </head>
 
 <body>
-   <p>
+   <a class="skip-link" href="#main-content">Skip to main content</a>
 
+   <header class="top-nav glass-card" role="banner">
+      <button class="menu-toggle" id="menuToggle" aria-controls="sidebar" aria-expanded="false"
+         aria-label="Toggle navigation menu">
+         <span></span>
+         <span></span>
+         <span></span>
+      </button>
 
-   </p>
+      <div class="logo" aria-label="Crisis AI brand">
+         <span class="logo-mark" aria-hidden="true">◆</span>
+         <span class="logo-text">Crisis_AI</span>
+      </div>
+
+      <nav class="top-links" aria-label="Top navigation">
+         <button type="button" class="top-link active" data-target="main-content">Dashboard</button>
+         <button type="button" class="top-link" data-target="alerts-title">Alerts</button>
+         <button type="button" class="top-link" data-target="analytics-title">Reports</button>
+         <button type="button" class="top-link" data-target="settings-section">Settings</button>
+      </nav>
+
+      <button class="profile-btn" aria-label="User profile">AR</button>
+   </header>
+
+   <div class="layout">
+      <aside class="sidebar glass-card" id="sidebar" aria-label="Sidebar navigation">
+         <nav aria-label="Sidebar menu">
+            <button type="button" class="sidebar-item active" data-target="main-content">
+               <span class="icon" aria-hidden="true">⌂</span>
+               <span>Dashboard</span>
+            </button>
+            <button type="button" class="sidebar-item" data-target="alerts-title">
+               <span class="icon" aria-hidden="true">⚠</span>
+               <span>Alerts</span>
+            </button>
+            <button type="button" class="sidebar-item" data-target="analytics-title">
+               <span class="icon" aria-hidden="true">▤</span>
+               <span>Reports</span>
+            </button>
+            <button type="button" class="sidebar-item" data-target="settings-section">
+               <span class="icon" aria-hidden="true">⚙</span>
+               <span>Settings</span>
+            </button>
+         </nav>
+      </aside>
+
+      <main id="main-content" class="dashboard-main" tabindex="-1">
+         <section class="hero glass-card" aria-labelledby="hero-title">
+            <h1 id="hero-title">AI Crisis Monitoring Dashboard</h1>
+            <p>
+               Real-time crisis intelligence from image, text, and voice pipelines to support fast, reliable emergency
+               response decisions.
+            </p>
+         </section>
+
+         <section class="stats-grid" aria-label="Key metrics">
+            <article class="glass-card stat-card">
+               <h2>Active Alerts</h2>
+               <p class="stat-value danger">12</p>
+               <p class="stat-meta">+3 in the last hour</p>
+            </article>
+            <article class="glass-card stat-card">
+               <h2>Resolved Cases</h2>
+               <p class="stat-value success">148</p>
+               <p class="stat-meta">94% resolution rate</p>
+            </article>
+            <article class="glass-card stat-card">
+               <h2>AI Confidence %</h2>
+               <p class="stat-value">97.8%</p>
+               <p class="stat-meta">Across latest 50 analyses</p>
+            </article>
+            <article class="glass-card stat-card">
+               <h2>Response Time</h2>
+               <p class="stat-value">02:14</p>
+               <p class="stat-meta">Average dispatch time</p>
+            </article>
+         </section>
+
+         <section class="content-grid">
+            <section class="alerts-panel glass-card" aria-labelledby="alerts-title">
+               <div class="section-header">
+                  <h2 id="alerts-title">Active Alerts</h2>
+                  <button class="action-btn" type="button">View All</button>
+               </div>
+
+               <article class="alert-card high-severity">
+                  <div>
+                     <h3>Urban Flooding Risk - Sector 7</h3>
+                     <p class="alert-meta">Severity: <span class="danger">High</span> • 2 min ago</p>
+                  </div>
+                  <span class="alert-status open">Open</span>
+               </article>
+
+               <article class="alert-card">
+                  <div>
+                     <h3>Road Accident Cluster - NH Corridor</h3>
+                     <p class="alert-meta">Severity: <span class="warning">Medium</span> • 14 min ago</p>
+                  </div>
+                  <span class="alert-status investigating">Investigating</span>
+               </article>
+
+               <article class="alert-card">
+                  <div>
+                     <h3>Power Outage - Emergency Ward Grid</h3>
+                     <p class="alert-meta">Severity: <span class="success">Low</span> • 31 min ago</p>
+                  </div>
+                  <span class="alert-status resolved">Resolved</span>
+               </article>
+            </section>
+
+            <section class="analytics-panel glass-card" aria-labelledby="analytics-title">
+               <div class="section-header">
+                  <h2 id="analytics-title">Analytics</h2>
+                  <button class="action-btn" type="button">Export</button>
+               </div>
+
+               <div class="chart-grid" role="img"
+                  aria-label="Chart placeholders for incident trend and response efficiency">
+                  <div class="chart-placeholder">
+                     <p>Incident Trend (24h)</p>
+                  </div>
+                  <div class="chart-placeholder">
+                     <p>Severity Distribution</p>
+                  </div>
+                  <div class="chart-placeholder full-width">
+                     <p>Response Efficiency Over Time</p>
+                  </div>
+               </div>
+            </section>
+         </section>
+      </main>
+   </div>
+
+   <footer class="footer" id="settings-section">
+      <p>© 2026 Crisis_AI • Intelligent Crisis Response Platform</p>
+   </footer>
+
+   <script>
+      const menuToggle = document.getElementById("menuToggle");
+      const sidebar = document.getElementById("sidebar");
+      const navButtons = document.querySelectorAll("[data-target]");
+
+      function closeSidebar() {
+         sidebar.classList.remove("open");
+         menuToggle.setAttribute("aria-expanded", "false");
+         menuToggle.focus();
+      }
+
+      function openSidebar() {
+         sidebar.classList.add("open");
+         menuToggle.setAttribute("aria-expanded", "true");
+         const firstSidebarButton = sidebar.querySelector(".sidebar-item");
+         firstSidebarButton?.focus();
+      }
+
+      menuToggle.addEventListener("click", () => {
+         const isOpen = sidebar.classList.contains("open");
+         if (isOpen) {
+            closeSidebar();
+         } else {
+            openSidebar();
+         }
+      });
+
+      navButtons.forEach((button) => {
+         button.addEventListener("click", () => {
+            const targetId = button.getAttribute("data-target");
+            const target = document.getElementById(targetId);
+            target?.scrollIntoView({ behavior: "smooth", block: "start" });
+            if (window.matchMedia("(max-width: 820px)").matches) {
+               sidebar.classList.remove("open");
+               menuToggle.setAttribute("aria-expanded", "false");
+            }
+         });
+      });
+
+      document.addEventListener("keydown", (event) => {
+         if (event.key === "Escape" && sidebar.classList.contains("open")) {
+            closeSidebar();
+         }
+      });
+
+      document.addEventListener("click", (event) => {
+         if (
+            sidebar.classList.contains("open") &&
+            !sidebar.contains(event.target) &&
+            !menuToggle.contains(event.target)
+         ) {
+            closeSidebar();
+         }
+      });
+   </script>
+
+   <script>
+      /*
+       Crisis AI Frontend API Integration
+      */
+
+      window.addEventListener('DOMContentLoaded', () => {
+        const user = CrisisAI.Auth.getCurrentUser();
+        if (user) {
+          console.log('User logged in:', user.name);
+          const profileBtn = document.querySelector('.profile-btn');
+          if (profileBtn) {
+            profileBtn.textContent = user.name.substring(0, 2).toUpperCase();
+            profileBtn.title = user.name;
+          }
+        }
+      });
+
+      function handleLogin(email, password) {
+        CrisisAI.Auth.login(email, password)
+          .then(user => {
+            console.log('Login successful:', user);
+            alert('Logged in as ' + user.name);
+          })
+          .catch(error => {
+            alert('Login failed: ' + error.message);
+          });
+      }
+
+      function handleSignup(name, email, password, phone, emergencyContact) {
+        CrisisAI.Auth.signup(name, email, password, phone, emergencyContact)
+          .then(result => {
+            alert('Account created! Please log in.');
+          })
+          .catch(error => {
+            alert('Signup failed: ' + error.message);
+          });
+      }
+
+      function analyzeInput(text, imageFile, audioFile) {
+        if (!CrisisAI.Auth.isLoggedIn()) {
+          alert('Please log in first');
+          return;
+        }
+        CrisisAI.Analysis.analyze(text, imageFile, audioFile)
+          .then(result => {
+            alert('Analysis complete!');
+          })
+          .catch(error => {
+            alert('Analysis failed: ' + error.message);
+          });
+      }
+
+      function loadUserProfile() {
+        if (!CrisisAI.Auth.isLoggedIn()) {
+          alert('Please log in first');
+          return;
+        }
+        CrisisAI.User.getProfile()
+          .then(profile => {
+            alert('Profile loaded successfully');
+          })
+          .catch(error => {
+            alert('Failed to load profile: ' + error.message);
+          });
+      }
+
+      function loadAlerts() {
+        CrisisAI.Dashboard.getAlerts()
+          .then(data => {
+            console.log('Alerts:', data);
+          })
+          .catch(error => {
+            console.error('Failed to load alerts:', error.message);
+          });
+      }
+
+      function handleLogout() {
+        CrisisAI.Auth.logout();
+        alert('Logged out');
+      }
+   </script>
 </body>
 
 </html>

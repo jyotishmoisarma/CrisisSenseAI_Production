@@ -11,10 +11,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("TriageCommander")
 
 def clean_and_parse_json(text):
-    """
-    A bulletproof JSON parser that extracts JSON blocks from AI responses,
-    handling markdown backticks, conversational text, and formatting errors.
-    """
+
     if not text:
         raise ValueError("Received empty text for JSON parsing")
         
@@ -34,40 +31,37 @@ def clean_and_parse_json(text):
         raise ValueError(f"Invalid JSON format: {str(e)}")
 
 def analyze_with_ai(context: str, user_profile: dict):
-    """
-    The CrisisSenseAI Triage Commander (Main Intelligence Engine).
-    Coordinates the final decision-making process by combining the
-    multi-modal context with the user's filtered medical profile.
-    
-    This function features aggressive fallback logic to ensure
-    an emergency decision is ALWAYS reached.
-    """
-    
+
     system_instruction = """
     ROLE: You are the CrisisSenseAI Triage Commander, an elite emergency response intelligence.
     
     MISSION: 
     Evaluate the provided incident context (Visual, Audio, and Text inputs) 
     alongside the User's Medical Profile to provide life-saving instructions.
+    according to your analysis emergency services will bo provided to the user and it will trigger SOS system.
     
     PROTOCOL:
     1. Severity (1-10): Be objective. 10 is immediate threat to life.
-    2. Status: 
-       - CRITICAL: Life/limb threat. Requires immediate action.
-       - URGENT: Serious but not instantly fatal.
-       - STABLE: Minor or situational concern.
-    3. System Actions: Select from [CALL_AMBULANCE, ALERT_CONTACTS, BROADCAST_NEIGHBORHOOD, FLASH_LIGHT, NONE].
-    4. Steps: Provide 3-5 imperative, short instructions (e.g., 'Apply pressure').
-    5. Medical: Tailor advice to their specific blood group/conditions if applicable.
+    2. EVALUATION TIERS:
+        - CRITICAL (Level 1): Immediate threat to life. (ACTION: Trigger AES).
+        - URGENT (Level 2): Serious injury, stable for minutes. (ACTION: First Aid).
+        - STABLE (Level 3): Minor concern. (ACTION: Home care).
+    3. Steps(actionable_steps): Provide 3-5 imperative, short instructions (e.g., 'Apply pressure'), A step by step list of actions the user should perform, that will help him in that situation, step by step guideline.
+    4. action_buttons(emergency services): Select from [CALL_AMBULANCE, CALL_POLICE, ALERT_EMERGENCY_CONTACTS, BROADCAST_NEIGHBORHOOD, FLASH_LIGHT, (more from your side)], tailor these according the situatuin and the info ypu have about the user.
+    5. Add confidence score (0.01 - 0.99) this will determine wheather the SOS/emergency services will be handled by the user manyally or with AI automatically. High confidence score will indicate the emergency services should be handles by the AI 
+    6. Never give generic advice; prioritize the ABCs (Airway, Breathing, Circulation).
+    7. Medical: Tailor advice to their specific blood group/conditions if that info was given applicable.
+    8. Analyze the situation carefully and give results, cause any mistake could cost a life
     
     STRICT OUTPUT FORMAT (JSON ONLY):
     {
       "severity_score": number,
       "status_level": "CRITICAL" | "URGENT" | "STABLE",
-      "system_actions": ["ACTION1", "ACTION2"],
-      "immediate_steps": ["Step 1", "Step 2", "Step 3"],
-      "medical_notes": "string",
-      "triage_summary": "3 word summary"
+      "confidence_score": number,
+      "situation_analysis": "A detailed but short summary of the situation",
+      "actionable_steps": ["Step 1", "Step 2", "Step 3"],
+      "action_buttons": ["ACTION1", "ACTION2"],
+      "medical_notes": "string"
     }
     """
 
@@ -81,12 +75,12 @@ def analyze_with_ai(context: str, user_profile: dict):
     Evaluate now.
     """
 
-    # --- PRIMARY MODEL: GEMINI 3.1 FLASH ---
-    for attempt in range(3):  # Simple retry logic for primary
+    # --- PRIMARY MODEL: GEMINIm ---
+    for attempt in range(3): 
         try:
             client = genai.Client(api_key=GEMINI_API_KEY)
             response = client.models.generate_content(
-                model="gemini-3.1-flash", 
+                model="gemini-2.5-flash", 
                 contents=user_payload,
                 config={
                     "system_instruction": system_instruction,
@@ -132,7 +126,7 @@ def analyze_with_ai(context: str, user_profile: dict):
                     "status_level": "CRITICAL",
                     "triage_summary": "SYSTEM EMERGENCY OFFLINE",
                     "immediate_steps": [
-                        "Manually call emergency services (911/999) immediately.",
+                        "Manually call emergency services immediately.",
                         "Stay on the line with human operators.",
                         "If bleeding, apply direct pressure with a clean cloth.",
                         "Do not move if you suspect neck or back injury."

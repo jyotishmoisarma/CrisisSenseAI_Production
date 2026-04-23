@@ -9,18 +9,12 @@ from config.settings import GEMINI_API_KEY
 logger = logging.getLogger(__name__)
 
 def analyze_image_and_text(image_bytes: bytes = None, user_text: str = None) -> str:
-    """
-    Multimodal Pre-processor (Feature 3).
-    Analyzes visual data and user-provided text together to create a situation context.
-    This acts as the visual 'eyes' for the CrisisSenseAI Commander.
-    """
+   
     if not image_bytes and not user_text:
         return json.dumps({"status": "No image or text provided for visual analysis."})
 
     try:
         client = genai.Client(api_key=GEMINI_API_KEY)
-        
-        # Comprehensive prompt for the visual pre-processor
         prompt = """
         You are an emergency triage vision assistant. 
         Your task is to analyze the provided user text and/or emergency image content.
@@ -55,7 +49,7 @@ def analyze_image_and_text(image_bytes: bytes = None, user_text: str = None) -> 
                 contents.append("[Image provided but could not be parsed by PIL]")
             
         response = client.models.generate_content(
-            model="gemini-3.1-flash",
+            model="gemini-2.5-flash",
             contents=contents,
             config={
                 "response_mime_type": "application/json"

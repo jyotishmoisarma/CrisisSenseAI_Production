@@ -1,12 +1,7 @@
 import json
 
 def build_context(user, text: str = None, image_desc: str = None, audio_text: str = None):
-    """
-    Builds a structured context for the AI by filtering the user's database profile 
-    and combining multi-modal inputs.
-    """
-    # 1. Filter out null/empty user info (Feature 5)
-    # This ensures only valid medical data reaches the AI prompt.
+
     user_profile = {}
     attributes_to_check = ['name', 'phone', 'emergency_contact', 'blood_group', 'medical_notes']
     
@@ -16,8 +11,7 @@ def build_context(user, text: str = None, image_desc: str = None, audio_text: st
         if value and str(value).strip() != "" and str(value).lower() != "null":
             user_profile[attr] = value
 
-    # 2. Build the Multi-modal Context Dictionary (Feature 4)
-    # This organizes the evaluations from separate AI modules (Image/Text/Audio)
+    # Organizes the evaluations from separate AI modules (Image/Text/Audio)
     inputs_context = {}
     
     # Raw user text input

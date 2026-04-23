@@ -77,7 +77,7 @@ def update_profile_data(user_id: str, data: UpdateProfileRequest, db: Session = 
     Uses exclude_unset to ensure existing data is not overwritten by nulls.
     """
     # Convert Pydantic model to dict, keeping only values actually sent by user
-    update_dict = data.dict(exclude_unset=True)
+    update_dict = data.model_dump(exclude_unset=True)
     
     if not update_dict:
         return {"message": "No changes requested.", "success": True}

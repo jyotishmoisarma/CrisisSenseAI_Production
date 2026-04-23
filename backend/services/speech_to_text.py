@@ -3,10 +3,7 @@ from google import genai
 from config.settings import GEMINI_API_KEY
 
 def convert_audio(audio_bytes: bytes, mime_type: str = "audio/mp3") -> str:
-    """
-    Audio Pre-processor (Feature 2).
-    Analyzes audio for transcription and environmental sounds.
-    """
+
     try:
         client = genai.Client(api_key=GEMINI_API_KEY)
         
@@ -22,7 +19,7 @@ def convert_audio(audio_bytes: bytes, mime_type: str = "audio/mp3") -> str:
         """
         
         response = client.models.generate_content(
-            model="gemini-3.1-flash",
+            model="gemini-2.5-flash",
             contents=[
                 prompt,
                 {"inline_data": {"mime_type": mime_type, "data": audio_bytes}}

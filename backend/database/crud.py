@@ -33,7 +33,6 @@ def update_user(db: Session, user_id: str, update_data: dict):
         return None
     
     for key, value in update_data.items():
-        # Only update if the value is provided (not null)
         if value is not None:
             setattr(user, key, value)
             

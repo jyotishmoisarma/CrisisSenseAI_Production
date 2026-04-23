@@ -2,11 +2,6 @@ from sqlalchemy import Column, String, Boolean, Text
 from database.db import Base
 
 class User(Base):
-    """
-    SQLAlchemy model representing the 'users' table.
-    This is the core data structure for CrisisSenseAI, storing both 
-    authentication data and sensitive emergency medical profiles.
-    """
     __tablename__ = "users"
 
     # Authentication & Identification

@@ -3,11 +3,12 @@ from models.user_model import User
 import uuid
 
 def create_user(db: Session, data):
+    clean_phone = "".join(filter(str.isdigit, data.phone))
     user = User(
         id=str(uuid.uuid4()),
         name=data.name,
         email=data.email,
-        phone=data.phone,
+        phone=clean_phone,
         password=data.password,
         emergency_contact=data.emergency_contact,
         blood_group=data.blood_group,

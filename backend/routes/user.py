@@ -44,7 +44,7 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
     if not user or not verify_password(data.password, user.password):
         raise HTTPException(status_code=400, detail="Invalid email or password")
     
-    # This line will crash with a 500 error if you haven't deleted the .db file
+    # Check if account is active
     if not getattr(user, 'is_active', True):
         raise HTTPException(status_code=403, detail="Account is deactivated")
     
@@ -83,11 +83,16 @@ def update_profile_data(user_id: str, data: UpdateProfileRequest, db: Session = 
         return {"message": "No changes requested.", "success": True}
 
     updated_user = update_user(db, user_id, update_dict)
+    
     if not updated_user:
         raise HTTPException(status_code=404, detail="User not found.")
     
     return {
-        "message": "Profile updated successfully.", 
-        "success": True,
+        "success": True, 
+        "message": "Profile updated in database",
+        "user": {
+            "name": updated_user.name,
+            "emergency_contact": updated_user.emergency_contact
+        },
         "updated_fields": list(update_dict.keys())
     }

@@ -4,7 +4,7 @@ from typing import Optional
 class SignupRequest(BaseModel):
     name: str = Field(..., min_length=2, max_length=100)
     email: EmailStr
-    phone: str = Field(..., pattern=r'^\+?1?\d{9,15}$')
+    phone: str = Field(..., pattern=r'^[\d\+\-\.\(\)\s]{9,20}$')
     password: str = Field(..., min_length=8)
     emergency_contact: Optional[str] = None
     blood_group: Optional[str] = None

@@ -11,3 +11,4 @@ python-jose[cryptography]
 python-dotenv
 requests
 duckduckgo-search
+psycopg2-binary

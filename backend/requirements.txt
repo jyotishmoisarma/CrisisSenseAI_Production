@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+python-multipart
+pydantic[email]
+sqlalchemy
+google-genai
+openai
+Pillow
+passlib[bcrypt]
+python-jose[cryptography]
+python-dotenv
+requests
+duckduckgo-search

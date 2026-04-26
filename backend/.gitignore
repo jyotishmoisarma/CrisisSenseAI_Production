@@ -4,3 +4,4 @@ users.db
 ..txt
 utils/
 hack/
+.vscode/

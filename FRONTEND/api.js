@@ -6,7 +6,7 @@
 // 1. DYNAMIC ROUTING
 const API_BASE_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
   ? 'http://127.0.0.1:8000'
-  : 'https://crisis-ai.onrender.com';
+  : 'https://crisissenseai-backend.onrender.com';
 
 // 2. SESSION STATE
 let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;

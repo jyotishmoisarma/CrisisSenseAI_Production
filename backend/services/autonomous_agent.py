@@ -1,7 +1,7 @@
 import json
 import logging
 import time
-from duckduckgo_search import DDGS
+#from duckduckgo_search import DDGS
 from google import genai
 from openai import OpenAI
 from config.settings import GEMINI_API_KEY, OPENROUTER_API_KEY

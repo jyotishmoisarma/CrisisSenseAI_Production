@@ -1,182 +1,140 @@
+/**
+ * CRISIS_AI - FULL FEATURE API HANDLER
+ * Features: Auth, Profile, Multi-modal Analysis, SOS Sessions, and Agent Actions.
+ */
 
-const API_BASE_URL = localStorage.getItem('apiUrl') || 'http://localhost:8000';
+// 1. DYNAMIC ROUTING
+const API_BASE_URL = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
+  ? 'http://127.0.0.1:8000'
+  : 'https://crisis-ai.onrender.com';
 
-// user session
+// 2. SESSION STATE
 let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
 
-
 const Auth = {
-  async signup(name, email, password, phone = '', emergencyContact = '') {
-    try {
-      const response = await fetch(`${API_BASE_URL}/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          phone,
-          emergency_contact: emergencyContact
-        })
-      });
+  /**
+   * SIGNUP: Handles destructuring and sends default values 
+   * to satisfy the Supabase/PostgreSQL schema.
+   */
+  async signup({ name, email, password, phone }) {
+    const response = await fetch(`${API_BASE_URL}/users/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name, email, password, phone,
+        emergency_contact: "Not Provided",
+        blood_group: "Unknown",
+        medical_notes: "None"
+      })
+    });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || 'Signup failed');
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error('Signup error:', error);
-      throw error;
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(typeof errorData.detail === 'string' ? errorData.detail : JSON.stringify(errorData.detail));
     }
+    return await response.json();
   },
 
   async login(email, password) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
+    const response = await fetch(`${API_BASE_URL}/users/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || 'Login failed');
-      }
-
-      const data = await response.json();
-      currentUser = data;
-      localStorage.setItem('currentUser', JSON.stringify(data));
-      return data;
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Login failed');
     }
+
+    const data = await response.json();
+    currentUser = data;
+    localStorage.setItem('currentUser', JSON.stringify(data));
+    return data;
   },
 
-  async logout() {
+  logout() {
     currentUser = null;
     localStorage.removeItem('currentUser');
+    location.reload();
   },
 
-  getCurrentUser() {
-    return currentUser;
-  },
-
-  isLoggedIn() {
-    return currentUser !== null;
-  }
+  getCurrentUser: () => currentUser,
+  isLoggedIn: () => currentUser !== null
 };
-
 
 const User = {
-  async getProfile(userId = null) {
-    const id = userId || currentUser?.user_id;
-    if (!id) throw new Error('No user logged in');
+  async getProfile(userId) {
+    const response = await fetch(`${API_BASE_URL}/users/profile/${userId}`);
+    if (!response.ok) throw new Error("Could not fetch profile data");
+    return await response.json();
+  },
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/profile/${id}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || 'Failed to fetch profile');
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error('Profile fetch error:', error);
-      throw error;
-    }
+  async updateProfile(userId, profileData) {
+    const response = await fetch(`${API_BASE_URL}/users/profile/${userId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profileData)
+    });
+    if (!response.ok) throw new Error("Database storage failed");
+    return await response.json();
   }
 };
-
 
 const Analysis = {
   async analyze(text = null, image = null, audio = null) {
-    if (!currentUser) throw new Error('User not logged in');
-    if (!text && !image && !audio) throw new Error('At least one input is required');
+    if (!currentUser) throw new Error('Authentication required');
+    const formData = new FormData();
+    formData.append('user_id', currentUser.user_id || currentUser.id);
 
-    try {
-      const formData = new FormData();
-      formData.append('user_id', currentUser.user_id);
-      
-      if (text) formData.append('text', text);
-      if (image) formData.append('image', image);
-      if (audio) formData.append('audio', audio);
+    if (text) formData.append('text', text);
+    if (image) formData.append('image', image);
+    if (audio) formData.append('audio', audio);
 
-      const response = await fetch(`${API_BASE_URL}/analyze`, {
-        method: 'POST',
-        body: formData
-      });
+    const response = await fetch(`${API_BASE_URL}/analyze`, {
+      method: 'POST',
+      body: formData
+    });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || 'Analysis failed');
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error('Analysis error:', error);
-      throw error;
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Analysis pipeline failed');
     }
+    return await response.json();
   }
 };
 
-
-const Dashboard = {
-  
-  async getAlerts() {
-    return {
-      alerts: [
-        {
-          id: 1,
-          title: 'Urban Flooding Risk - Sector 7',
-          severity: 'high',
-          status: 'open',
-          timestamp: 'now'
-        },
-        {
-          id: 2,
-          title: 'Road Accident Cluster - NH Corridor',
-          severity: 'medium',
-          status: 'investigating',
-          timestamp: '14 min ago'
-        },
-        {
-          id: 3,
-          title: 'Power Outage - Emergency Ward Grid',
-          severity: 'low',
-          status: 'resolved',
-          timestamp: '31 min ago'
-        }
-      ]
-    };
+const SOS = {
+  async init(analysisResult, lat, lng) {
+    const response = await fetch(`${API_BASE_URL}/sos/init`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: currentUser.user_id || currentUser.id,
+        analysis_result: analysisResult,
+        lat: lat,
+        lng: lng,
+        auto_allowed: true
+      })
+    });
+    return await response.json();
   },
-  async getStats() {
-    return {
-      activeAlerts: 12,
-      resolvedCases: 148,
-      aiConfidence: 97.8,
-      responseTime: '02:14'
-    };
+
+  async heartbeat(sessionId, lat, lng) {
+    return await fetch(`${API_BASE_URL}/sos/heartbeat/${sessionId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lat, lng })
+    });
+  },
+
+  async executeAgentAction(action, locationStr) {
+    const response = await fetch(`${API_BASE_URL}/sos/execute-agent?action=${encodeURIComponent(action)}&location_str=${encodeURIComponent(locationStr)}`, {
+      method: 'POST'
+    });
+    if (!response.ok) throw new Error("Agent execution failed");
+    return await response.json();
   }
 };
 
-
-function setApiUrl(url) {
-  localStorage.setItem('apiUrl', url);
-  location.reload();
-}
-
-window.CrisisAI = {
-  Auth,
-  User,
-  Analysis,
-  Dashboard,
-  setApiUrl,
-  API_BASE_URL
-};
+window.CrisisAI = { Auth, User, Analysis, SOS };

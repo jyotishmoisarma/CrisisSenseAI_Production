@@ -1,0 +1,760 @@
+/* ============================================================================
+   CRISIS AI - REFACTORED LAYOUT SYSTEM
+   Modern, Responsive, Overflow-Free Dashboard
+   ============================================================================ */
+
+/* SPACING SCALE */
+:root {
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+
+  /* COLORS - Dark Theme */
+  --bg-primary: #0a0e27;
+  --bg-secondary: #121a3a;
+  --bg-tertiary: #1b264f;
+  --bg-light: #2a3a6b;
+  --text-primary: #e6eefc;
+  --text-secondary: #9fb0d0;
+  --text-muted: rgba(159, 176, 208, 0.6);
+  --accent-blue: #4f8cff;
+  --accent-purple: #7c4dff;
+  --accent-red: #ff4d4d;
+  --border-color: rgba(79, 140, 255, 0.22);
+  --border-light: rgba(79, 140, 255, 0.1);
+
+  /* TRANSITIONS */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* BREAKPOINTS */
+  --breakpoint-mobile: 480px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-wide: 1440px;
+}
+
+/* ============================================================================
+   GLOBAL STYLES
+   ============================================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+body {
+  padding-top: 0;
+}
+
+/* ============================================================================
+   CONTAINER & LAYOUT
+   ============================================================================ */
+
+.auth-container {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+  margin-top: 50px;
+  min-height: calc(100vh - 50px);
+  padding: var(--spacing-lg);
+  background: linear-gradient(
+    135deg,
+    rgba(10, 14, 39, 0.95) 0%,
+    rgba(18, 26, 58, 0.95) 50%,
+    rgba(27, 38, 79, 0.95) 100%
+  );
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Responsive: Tablet and up → 2-column layout */
+@media (min-width: 768px) {
+  .auth-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-xl);
+    align-items: start;
+  }
+}
+
+/* ============================================================================
+   NEWS PANEL (LEFT SIDE)
+   ============================================================================ */
+
+.news-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+/* ============================================================================
+   NEWS HEADER
+   ============================================================================ */
+
+.news-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+.news-kicker {
+  color: var(--accent-blue);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 0;
+}
+
+.news-panel h2 {
+  color: var(--text-primary);
+  font-size: clamp(1.35rem, 4vw, 1.8rem);
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.news-intro {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 55ch;
+}
+
+/* ============================================================================
+   FILTER TABS
+   ============================================================================ */
+
+.filter-tabs {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  flex-shrink: 0;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid var(--border-color);
+  background: rgba(79, 140, 255, 0.08);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: max-content;
+}
+
+.filter-btn:hover {
+  background: rgba(79, 140, 255, 0.15);
+  border-color: var(--accent-blue);
+  color: var(--text-primary);
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  border-color: var(--accent-purple);
+  color: white;
+  box-shadow: 0 4px 12px rgba(79, 140, 255, 0.3);
+}
+
+/* ============================================================================
+   NEWS CAROUSEL - SCROLL SNAP
+   ============================================================================ */
+
+.news-carousel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--spacing-lg);
+  background: rgba(7, 11, 29, 0.6);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* News Lanes with Scroll Snap */
+.news-lane {
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  flex-shrink: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+
+  /* Hide scrollbar but allow scrolling */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(79, 140, 255, 0.2) transparent;
+}
+
+/* Scrollbar styling for Webkit browsers */
+.news-lane::-webkit-scrollbar {
+  height: 6px;
+}
+
+.news-lane::-webkit-scrollbar-track {
+  background: rgba(79, 140, 255, 0.05);
+  border-radius: 10px;
+}
+
+.news-lane::-webkit-scrollbar-thumb {
+  background: rgba(79, 140, 255, 0.3);
+  border-radius: 10px;
+}
+
+.news-lane::-webkit-scrollbar-thumb:hover {
+  background: rgba(79, 140, 255, 0.5);
+}
+
+/* News Track - Flex Container */
+.news-track {
+  display: flex;
+  gap: var(--spacing-md);
+  width: max-content;
+  padding: var(--spacing-sm) 0;
+  will-change: transform;
+}
+
+/* Disable animations for scroll-snap view */
+.news-track.animate {
+  animation: none;
+}
+
+/* News Item Card */
+.news-item {
+  flex: 0 0 auto;
+  width: clamp(240px, 100%, 340px);
+  padding: var(--spacing-md);
+  background: rgba(79, 140, 255, 0.09);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.news-item:hover {
+  background: rgba(79, 140, 255, 0.16);
+  border-color: var(--accent-blue);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(79, 140, 255, 0.25);
+}
+
+.news-item.high {
+  border-color: rgba(255, 77, 77, 0.3);
+  background: rgba(255, 77, 77, 0.07);
+}
+
+.news-item.high:hover {
+  border-color: rgba(255, 77, 77, 0.5);
+  background: rgba(255, 77, 77, 0.12);
+}
+
+/* News Item Header */
+.news-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.news-category {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-blue);
+}
+
+.news-category i {
+  font-size: 0.9rem;
+}
+
+.severity-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.severity-badge.severity-critical {
+  background: rgba(255, 77, 77, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 77, 77, 0.3);
+}
+
+.severity-badge.severity-high {
+  background: rgba(255, 165, 0, 0.2);
+  color: #ffa500;
+  border: 1px solid rgba(255, 165, 0, 0.3);
+}
+
+.severity-badge.severity-medium {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.severity-badge.severity-low {
+  background: rgba(79, 140, 255, 0.2);
+  color: var(--accent-blue);
+  border: 1px solid var(--border-color);
+}
+
+/* News Item Typography */
+.news-item h3 {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.news-item p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* ============================================================================
+   LOGIN PANEL (RIGHT SIDE)
+   ============================================================================ */
+
+.container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .container {
+    position: sticky;
+    top: var(--spacing-xl);
+    align-self: start;
+    max-height: calc(100vh - var(--spacing-xl) - 50px);
+  }
+}
+
+/* Form Container */
+.form {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: rgba(7, 11, 29, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: var(--spacing-xl);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+/* Toggle Checkbox (Hidden) */
+#signup_toggle {
+  display: none;
+}
+
+/* Form Styles */
+.form_front,
+.form_back {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  width: 100%;
+}
+
+#signup_toggle:checked ~ .form .form_front {
+  display: none;
+}
+
+#signup_toggle:checked ~ .form .form_back {
+  display: flex;
+}
+
+#signup_toggle:not(:checked) ~ .form .form_back {
+  display: none;
+}
+
+/* Form Title */
+.form_details {
+  color: var(--text-primary);
+  font-size: clamp(1.5rem, 3vw, 1.8rem);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  text-align: center;
+  margin: 0;
+}
+
+/* Input Fields */
+.input {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all var(--transition-normal);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:focus {
+  outline: none;
+  background: rgba(79, 140, 255, 0.12);
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 12px rgba(79, 140, 255, 0.2);
+}
+
+/* Submit Button */
+.form .btn {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: 0 4px 15px rgba(79, 140, 255, 0.3);
+  letter-spacing: 0.5px;
+}
+
+.form .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(79, 140, 255, 0.4);
+}
+
+.form .btn:active {
+  transform: translateY(0);
+}
+
+/* Form Toggle Links */
+.switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  text-align: center;
+  margin-top: var(--spacing-md);
+}
+
+.signup_tog {
+  color: var(--accent-blue);
+  font-weight: 700;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  text-decoration: none;
+}
+
+.signup_tog:hover {
+  color: var(--accent-purple);
+  text-decoration: underline;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+/* Mobile: Single column, stacked layout */
+@media (max-width: 767px) {
+  .auth-container {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    min-height: auto;
+  }
+
+  .news-carousel {
+    max-height: 400px;
+  }
+
+  .form {
+    max-width: 100%;
+    margin-top: var(--spacing-lg);
+  }
+
+  .filter-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Tablet: 2 columns with tighter spacing */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .auth-container {
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+  }
+
+  .news-item {
+    width: clamp(200px, 100%, 300px);
+  }
+
+  .form {
+    max-width: 380px;
+  }
+}
+
+/* Desktop: Full layout with all features */
+@media (min-width: 1024px) {
+  .auth-container {
+    gap: var(--spacing-2xl);
+    padding: var(--spacing-2xl);
+    align-items: start;
+  }
+
+  .news-carousel {
+    min-height: 400px;
+  }
+
+  .form {
+    max-width: 420px;
+  }
+}
+
+/* Wide desktop */
+@media (min-width: 1440px) {
+  .auth-container {
+    padding: var(--spacing-3xl);
+  }
+}
+
+/* ============================================================================
+   ACCESSIBILITY & PERFORMANCE
+   ============================================================================ */
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .news-track.animate {
+    animation: none;
+  }
+}
+
+/* ============================================================================
+   HIDE DEFAULT CAROUSEL (Old system)
+   ============================================================================ */
+
+.incident-carousel {
+  display: none;
+}
+
+.carousel-track {
+  display: none;
+}
+
+/* ============================================================================
+   ANALYZE BUTTON - CTA (Call To Action)
+   ============================================================================ */
+
+.analyze-wrapper {
+  width: 100%;
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.analyze-btn {
+  width: 100%;
+  max-width: 420px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: none;
+
+  background: linear-gradient(135deg, #ff3b3b, #ff0000);
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.analyze-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px rgba(255, 0, 0, 0.7);
+  background: linear-gradient(135deg, #ff5555, #ff1111);
+}
+
+.analyze-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 0 18px rgba(255, 0, 0, 0.6);
+}
+
+.analyze-btn:focus {
+  outline: 2px solid rgba(255, 0, 0, 0.5);
+  outline-offset: 2px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 767px) {
+  .analyze-wrapper {
+    margin-bottom: var(--spacing-md);
+    padding: 0 var(--spacing-md);
+  }
+
+  .analyze-btn {
+    max-width: 100%;
+    font-size: 15px;
+    padding: 12px 16px;
+  }
+}
+
+/* Before element for hover effect */
+.analyze-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: left 0.3s ease;
+}
+
+.analyze-btn:hover::before {
+  left: 100%;
+}
+
+.form-section-heading {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  letter-spacing: 0.5px;
+  opacity: 0.8;
+}
+
+/* ============================================================================
+   LOGIN / SIGN UP REDIRECT BUTTON
+   ============================================================================ */
+
+.login-signup-redirect-btn {
+  width: 100%;
+  max-width: 420px; /* Same as analyze-btn */
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: 10px;
+  border: 1px solid var(--border-color); /* Subtle border */
+  background: rgba(79, 140, 255, 0.08); /* Subtle background */
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  margin-bottom: var(--spacing-lg); /* Space below it */
+  margin-top: var(--spacing-md); /* Space above it */
+}
+
+.login-signup-redirect-btn:hover {
+  background: rgba(79, 140, 255, 0.15);
+  border-color: var(--accent-blue);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.login-signup-redirect-btn:active {
+  transform: translateY(0);
+}

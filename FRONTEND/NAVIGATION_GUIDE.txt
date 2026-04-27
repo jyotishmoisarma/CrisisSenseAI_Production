@@ -1,0 +1,224 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    FRONTEND NAVIGATION & FILE LINKING
+═══════════════════════════════════════════════════════════════════════════════
+
+📍 ENTRY POINT: homepage.html
+─────────────────────────────────────────────────────────────────────────────
+
+   ┌─────────────────────────────────────────────────┐
+   │   CrisisSenseAI - Real-Time Crisis Intel       │
+   │                                                 │
+   │   🔗 Features | How it works | Contact          │
+   │   [Login Button] ────────────────────┐         │
+   └─────────────────────────────────────────────────┘
+                                         │
+                                         │
+                                         ↓
+🔐 LOGIN/SIGNUP PAGE: auth.html
+─────────────────────────────────────────────────────────────────────────────
+
+   ┌─────────────────────────────────────────────────┐
+   │         CrisisSenseAI Authentication            │
+   │                                                 │
+   │   ┌───────────┐          ┌───────────┐        │
+   │   │   LOGIN   │  ⟷      │  SIGN UP  │        │
+   │   │           │          │           │        │
+   │   │  Email    │          │  Name     │        │
+   │   │  Password │          │  Email    │        │
+   │   │ [Login]   │          │  Password │        │
+   │   └───────────┘          │  Confirm  │        │
+   │                          │ [Register]│        │
+   │                          └───────────┘        │
+   │                                                 │
+   │  📰 Global Incident Briefing (auto-scrolling) │
+   │  [Filter Buttons]                              │
+   └─────────────────────────────────────────────────┘
+                                         │
+                                     (Login)
+                                         │
+                                         ↓
+📊 MAIN DASHBOARD: index.html
+─────────────────────────────────────────────────────────────────────────────
+
+   ┌──────────────────────────────────────────────────────────────┐
+   │  ◆ CrisisSenseAI  [Dashboard] [My Profile]  [👤] (Logout)  │
+   ├──────────────────────────────────────────────────────────────┤
+   │                                                               │
+   │  🚨 IMMEDIATE INCIDENT REPORTING                            │
+   │  ┌──────────────────────────────────────────────────────┐   │
+   │  │  📷 [Live Camera Feed]                      [📸Snap] │   │
+   │  │  Gallery: [🖼️] [🖼️] [🖼️]                              │   │
+   │  │  [+] | [Describe the crisis...] | [🎤 Record Audio]     │   │
+   │  │  [🤖 Dispatch AI Commander]                            │   │
+   │  │                                                          │   │
+   │  │  Status: ⚪ Visual | ⚪ Audio | ⚪ Triage              │   │
+   │  └──────────────────────────────────────────────────────┘   │
+   │                                                               │
+   │  📋 ANALYSIS RESULTS                                         │
+   │  ┌──────────────────────────────────────────────────────┐   │
+   │  │ 🔴 MODE: CRITICAL                                    │   │
+   │  │ Summary: "Heavy flooding downtown..."               │   │
+   │  │ Directives:                                          │   │
+   │  │  ✓ Evacuate zone                                    │   │
+   │  │  ✓ Alert emergency services                         │   │
+   │  │                                                      │   │
+   │  │ Actions:                                            │   │
+   │  │ [CALL_AMBULANCE] [Manual] [Auto Loading...]        │   │
+   │  │ [CALL_POLICE]    [Manual] [Auto Loading...]        │   │
+   │  └──────────────────────────────────────────────────────┘   │
+   │                                                               │
+   │  ═════════════════════════════════════════════════════     │
+   │                                                               │
+   │  👤 MY PROFILE SECTION                                       │
+   │  ┌──────────────────────────────────────────────────────┐   │
+   │  │ Emergency Contact: Mom +1234567890                   │   │
+   │  │ Blood Group: O+                                      │   │
+   │  │ Medical History: Allergic to penicillin            │   │
+   │  │ Location Tracking: No                               │   │
+   │  │                                                      │   │
+   │  │ [Edit Profile]                                      │   │
+   │  └──────────────────────────────────────────────────────┘   │
+   │                                                               │
+   └──────────────────────────────────────────────────────────────┘
+                                         │
+                                   (Logout)
+                                         │
+                                         ↓
+                                   ↻ Back to auth.html
+
+
+═══════════════════════════════════════════════════════════════════════════════
+📂 FILE STRUCTURE & LINKING
+═══════════════════════════════════════════════════════════════════════════════
+
+🏠 HOMEPAGE SECTION
+───────────────────
+homepage.html  ← Entry point
+├─ Imports: homepage.css
+├─ Links to: auth.html (Login button)
+└─ Anchors: #features, #how, #contact
+
+
+🔐 AUTH SECTION  
+───────────────
+auth.html  ← User login/signup
+├─ Imports: auth.css, api.js
+├─ Links to: homepage.html (logo), main.html (after login)
+└─ Features: Flip card forms, incident ticker
+
+
+📊 MAIN DASHBOARD SECTION
+─────────────────────────
+index.html  ← Primary dashboard (also called main.html)
+├─ Imports: index.css, style.css, api.js
+├─ Links to: homepage.html (logo), auth.html (logout)
+├─ Features:
+│  ├─ Incident reporting
+│  ├─ Photo/audio capture
+│  ├─ AI analysis display
+│  └─ Profile management
+└─ Alternative: dashboard.html (similar layout)
+
+
+🔌 API INTEGRATION (ALL PAGES)
+──────────────────────────────
+api.js  ← Loaded by auth.html, index.html
+├─ CrisisAI.Auth
+├─ CrisisAI.User
+├─ CrisisAI.Analysis
+└─ CrisisAI.SOS
+
+
+🎨 STYLESHEETS
+───────────────
+homepage.css     → For homepage.html
+auth.css         → For auth.html
+index.css        → For index.html
+dashboard.css    → Secondary dashboard
+style.css        → Shared utilities (colors, buttons, glass effect)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+🔗 HTML-TO-HTML LINKS
+═══════════════════════════════════════════════════════════════════════════════
+
+FROM: homepage.html
+  TO: auth.html
+  TRIGGER: User clicks "Login" button
+  CODE: <a class="btn btn-ghost" href="auth.html">Login</a>
+
+FROM: auth.html
+  TO: homepage.html
+  TRIGGER: User clicks logo or back link
+  CODE: <a href="homepage.html"><strong>CrisisSenseAI</strong></a>
+
+FROM: auth.html
+  TO: index.html (main.html)
+  TRIGGER: Successful login/signup
+  CODE: window.location.href = 'main.html'  (in JavaScript)
+
+FROM: index.html
+  TO: auth.html
+  TRIGGER: User clicks logout
+  CODE: CrisisAI.Auth.logout()  (auto-reloads page)
+
+FROM: index.html
+  TO: homepage.html
+  TRIGGER: User clicks logo
+  CODE: onclick="location.href='homepage.html'"
+
+
+═══════════════════════════════════════════════════════════════════════════════
+📡 API CALLS FLOW
+═══════════════════════════════════════════════════════════════════════════════
+
+Login Process:
+  auth.html → [Form] → api.js (CrisisAI.Auth.login) → Backend → localStorage
+
+Incident Report Process:
+  index.html → [Camera/Photos/Audio] → api.js (CrisisAI.Analysis.analyze)
+           → Backend (AI pipeline) → Results displayed in index.html
+
+Profile Update:
+  index.html → [Form] → api.js (CrisisAI.User.updateProfile) → Backend
+
+
+═══════════════════════════════════════════════════════════════════════════════
+⚡ QUICK REFERENCE
+═══════════════════════════════════════════════════════════════════════════════
+
+STARTING PAGE:     homepage.html
+LOGIN PAGE:        auth.html
+MAIN DASHBOARD:    index.html (also called main.html)
+API HANDLER:       api.js
+
+TOTAL FILES:       12
+├─ HTML:  5 files (homepage, auth, index, dashboard, etc.)
+├─ CSS:   5 files (homepage, auth, index, dashboard, style)
+├─ JS:    1 file (api)
+└─ MD:    2 files (README, FRONTEND_STRUCTURE)
+
+SIZE:              ~95 KB total
+
+
+═══════════════════════════════════════════════════════════════════════════════
+✅ VERIFICATION CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+Links Verified:
+ [✓] homepage.html → auth.html
+ [✓] auth.html → homepage.html
+ [✓] auth.html → index.html (after login)
+ [✓] index.html → auth.html (logout)
+ [✓] All CSS files properly imported
+ [✓] api.js loaded on all interactive pages
+ [✓] No broken references
+ [✓] All sections organized by purpose
+
+Documentation:
+ [✓] README.md - Setup & API reference
+ [✓] FRONTEND_STRUCTURE.md - Detailed file organization
+ [✓] NAVIGATION_GUIDE.txt - This file
+
+
+═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>CrisisSenseAI | Authentication</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+   <link rel="stylesheet" href="homepage.css" />
+   <link rel="stylesheet" href="auth-refactored.css" />
+   <script src="api.js"></script>
+</head>
+
+<body>
+
+   <div class="incident-carousel">
+      <div class="carousel-track" id="carousel-track">
+
+      </div>
+   </div>
+
+   <header class="site-header">
+      <div class="brand">
+         <span class="brand-mark">◆</span>
+         <strong class="brand-name">CrisisSenseAI</strong>
+      </div>
+      <nav class="site-nav">
+         <a href="homepage.html">Home</a>
+      </nav>
+      <div class="site-actions">
+         <a class="btn btn-ghost" href="homepage.html">Back</a>
+      </div>
+   </header>
+
+   <main class="auth-container">
+      <section class="news-panel">
+         <div class="news-header">
+            <p class="news-kicker">CrisisSenseAI Briefing</p>
+            <h2>Recent Global Incident Highlights</h2>
+            <p class="news-intro">Priority updates from active events worldwide, curated for rapid situational
+               awareness.</p>
+         </div>
+         <div class="filter-tabs">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="Seismic">Seismic</button>
+            <button class="filter-btn" data-filter="Flooding">Flooding</button>
+            <button class="filter-btn" data-filter="Storm">Storm</button>
+            <button class="filter-btn" data-filter="Wildfire">Fire</button>
+         </div>
+         <div class="news-carousel" aria-label="CrisisSenseAI headline ticker">
+            <div class="news-lane lane-rtl">
+               <div class="news-track animate dir-rtl" id="news-track-rtl"></div>
+            </div>
+            <div class="news-lane lane-ltr">
+               <div class="news-track animate dir-ltr" id="news-track-ltr"></div>
+            </div>
+         </div>
+      </section>
+      <section class="container">
+         <input type="checkbox" id="signup_toggle" />
+         <div class="form">
+            <form class="form_front" id="loginFormAuth">
+               <p class="form-section-heading">Choose your path:</p>
+               <div class="analyze-wrapper">
+                  <button class="analyze-btn" title="You are using direct access without login">Analyze
+                     Directly</button>
+               </div>
+               <button type="button" class="btn login-signup-redirect-btn" id="loginSignupRedirectBtn">Login / Sign
+                  Up</button>
+            </form>
+            <form class="form_back" id="signupFormAuth">
+               <div class="form_details">Sign Up</div>
+               <input type="text" id="signupNameAuth" class="input" placeholder="Full Name" required />
+               <input type="email" id="signupEmailAuth" class="input" placeholder="Email Address" required />
+               <input type="password" id="signupPasswordAuth" class="input" placeholder="Password" required />
+               <input type="password" id="signupConfirmPasswordAuth" class="input" placeholder="Confirm Password"
+                  required />
+               <button type="submit" class="btn">Create Account</button>
+               <span class="switch">Already have an account?
+                  <label for="signup_toggle" class="signup_tog">Login</label>
+               </span>
+            </form>
+         </div>
+      </section>
+   </main>
+
+   <script>
+      const incidents = [
+         { location: "Japan (April 20)", description: "M7.5 earthquake in the northeast; triggered tsunami warnings", dangerous: true, category: "Seismic", severity: 5 },
+         { location: "Indonesia (April 2)", description: "M7.3 earthquake in North Sulawesi; 1 death, 5 injured", dangerous: true, category: "Seismic", severity: 5 },
+         { location: "Ethiopia (March 10)", description: "Landslides and floods in Gammo Zone; 96 lives lost, 780 households destroyed", dangerous: true, category: "Flooding", severity: 5 },
+         { location: "Afghanistan (March 25–April)", description: "Flash floods across 13 provinces; 28 deaths, thousands of livestock lost", dangerous: true, category: "Flooding", severity: 5 },
+         { location: "Solomon Islands (April 6)", description: "Tropical Cyclone Maila; Category 3, winds up to 185 km/h", dangerous: true, category: "Storm", severity: 5 },
+         { location: "USA (March 17–26)", description: "Tornado outbreak across the South; multiple fatalities and neighborhood destruction", dangerous: true, category: "Storm", severity: 5 },
+         { location: "Chile (January–February)", description: "Massive forest fires; 22 deaths, hundreds of homes burned in Valparaíso", dangerous: true, category: "Wildfire", severity: 5 },
+         { location: "Malaysia (April 22)", description: "Fire intensified by heat and wind; destroyed over 1,000 homes", dangerous: true, category: "Wildfire", severity: 4 },
+         { location: "Turkey (April)", description: "Tremors in Siirt region exacerbated building damage during flooding", dangerous: true, category: "Flooding", severity: 4 },
+         { location: "Bangladesh (March–April)", description: "Measles outbreak worsened by displacement from flood-prone areas; 118 deaths", dangerous: true, category: "Health", severity: 4 },
+         { location: "Egypt (April 26)", description: "M4.3 earthquake centered near Suez; tremors felt in Cairo", dangerous: false, category: "Seismic", severity: 2 },
+         { location: "France (January)", description: "European windstorms; caused widespread flooding and coastal erosion", dangerous: false, category: "Storm", severity: 2 }
+      ];
+
+      const categoryIcons = {
+         "Seismic": "fa-earth-americas",
+         "Structural": "fa-building",
+         "Flooding": "fa-water",
+         "Storm": "fa-cloud-bolt",
+         "Wildfire": "fa-fire",
+         "Avalanche": "fa-mountain",
+         "Drought": "fa-droplet",
+         "Heat": "fa-sun",
+         "Health": "fa-hospital",
+         "Environmental": "fa-leaf",
+         "Economic": "fa-chart-line"
+      };
+
+      function getSeverityLabel(severity) {
+         if (severity >= 5) return "Critical";
+         if (severity === 4) return "High";
+         if (severity === 3) return "Medium";
+         if (severity === 2) return "Low";
+         return "Info";
+      }
+
+      function renderNews(filter = 'all') {
+         const trackRtl = document.getElementById('news-track-rtl');
+         const trackLtr = document.getElementById('news-track-ltr');
+         if (!trackRtl || !trackLtr) return;
+
+         trackRtl.innerHTML = '';
+         trackLtr.innerHTML = '';
+
+         let selectedIncidents = incidents;
+         if (filter !== 'all') selectedIncidents = incidents.filter(i => i.category === filter);
+
+         const displayIncidents = selectedIncidents.slice(0, 12);
+         const topLane = displayIncidents.filter((_, idx) => idx % 2 === 0);
+         const bottomLane = displayIncidents.filter((_, idx) => idx % 2 === 1);
+
+         function buildItem(incident) {
+            const item = document.createElement('article');
+            const severityClass = incident.severity >= 4 ? 'critical' : incident.severity === 3 ? 'medium' : 'low';
+            const icon = categoryIcons[incident.category] || 'fa-circle-exclamation';
+
+            item.className = `news-item ${incident.dangerous ? 'high' : ''} severity-${severityClass}`;
+            item.innerHTML = `
+               <div class="news-item-header">
+                  <div class="news-category">
+                     <i class="fas ${icon}"></i>
+                     <span>${incident.category}</span>
+                  </div>
+                  <span class="severity-badge severity-${severityClass}">${getSeverityLabel(incident.severity)}</span>
+               </div>
+               <h3>${incident.location}</h3>
+               <p>${incident.description}</p>
+            `;
+            return item;
+         }
+
+         [...topLane, ...topLane].forEach((incident) => trackRtl.appendChild(buildItem(incident)));
+         [...bottomLane, ...bottomLane].forEach((incident) => trackLtr.appendChild(buildItem(incident)));
+
+         [trackRtl, trackLtr].forEach((track) => {
+            track.classList.remove('animate');
+            void track.offsetWidth;
+            track.classList.add('animate');
+         });
+      }
+
+      function setupFilterTabs() {
+         const filterBtns = document.querySelectorAll('.filter-btn');
+         filterBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+               filterBtns.forEach(b => b.classList.remove('active'));
+               this.classList.add('active');
+               renderNews(this.getAttribute('data-filter'));
+               $jsCode
+            });
+         });
+      }
+
+      window.addEventListener('DOMContentLoaded', () => {
+         // Setup for news tickers and filters
+         renderNews();
+         setupFilterTabs();
+
+         // If user is already logged in, redirect them to the main app
+         if (typeof CrisisAI !== 'undefined' && CrisisAI.Auth.isLoggedIn()) {
+            window.location.href = 'main.html';
+            return;
+         }
+
+         // Auth form handling
+         const signupForm = document.getElementById('signupFormAuth');
+         if (signupForm) {
+            signupForm.addEventListener('submit', async (e) => {
+               e.preventDefault();
+               const name = document.getElementById('signupNameAuth').value;
+               const email = document.getElementById('signupEmailAuth').value;
+               const password = document.getElementById('signupPasswordAuth').value;
+               const confirmPassword = document.getElementById('signupConfirmPasswordAuth').value;
+
+               if (password !== confirmPassword) {
+                  alert("Passwords do not match!");
+                  return;
+               }
+
+               try {
+                  await CrisisAI.Auth.signup(name, email, password);
+                  await CrisisAI.Auth.login(email, password); // Auto-login after signup (redirects to dashboard.html)
+                  window.location.href = 'index.html'; // Redirect to index.html after signup
+               } catch (error) {
+                  alert(`Signup Failed: ${error.message}`);
+               }
+            });
+         }
+      });
+      // Analyze button click handler
+      const analyzeBtn = document.querySelector(".analyze-btn");
+      if (analyzeBtn) {
+         analyzeBtn.addEventListener("click", () => {
+            window.location.href = "main.html";
+         });
+      }
+      // New Login/Sign Up redirect button handler
+      const loginSignupRedirectBtn = document.getElementById("loginSignupRedirectBtn");
+      if (loginSignupRedirectBtn) {
+         loginSignupRedirectBtn.addEventListener("click", () => {
+            window.location.href = "index.html"; // Redirect to index.html
+         });
+      }
+   </script>
+</body>
+
+</html>

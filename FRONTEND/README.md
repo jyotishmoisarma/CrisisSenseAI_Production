@@ -1,216 +1,301 @@
-# Crisis AI Frontend - Getting Started 
+# CrisisSenseAI Frontend - Complete Documentation
 
-Yo! This is how you connect the pretty website to the backend. Let's go! 
+Welcome! Here's everything you need to know about the frontend structure and how to use it.
 
-## What Files Do What?
+---
 
-### `api.js`
-This is basically your messenger between the website and the server. It talks to the backend so you can log in, send pictures, and all that stuff.
+## 📁 File Organization
+
+### **3 Main Sections:**
+
+#### 🏠 **HOMEPAGE** (`homepage.html`)
+- Public landing page with features overview
+- Links to login and other sections
+- Includes incident ticker and how-it-works guide
+- Styles: `homepage.css`
+
+#### 🔐 **AUTH** (`auth.html`)
+- Login & Signup forms
+- Global incident briefing ticker
+- Auto-redirects to dashboard if logged in
+- Styles: `auth.css`
+
+#### 📊 **MAIN DASHBOARD** (`index.html` / referred to as `main.html`)
+- Crisis incident reporting interface
+- Real-time camera + photo + audio capture
+- AI analysis & triage
+- User profile management
+- Styles: `index.css` + `style.css`
+
+---
+
+## 🔌 API Integration
+
+### `api.js` - Your Backend Messenger
+This is the glue between frontend and backend. It's loaded by all HTML files.
 
 **What you can do with it:**
-- `CrisisAI.Auth` - Login, register, logout stuff
-- `CrisisAI.User` - Get your profile info
-- `CrisisAI.Analysis` - Send pictures/audio/text to analyze crisis
-- `CrisisAI.Dashboard` - Get alerts and cool stats
+- `CrisisAI.Auth` - Login, register, logout
+- `CrisisAI.User` - Get/update profile info
+- `CrisisAI.Analysis` - Send pictures/audio/text for analysis
+- `CrisisAI.SOS` - Emergency response coordination
 
-### `style.css`
-Just makes things look pretty. Nothing to see here! 
+### API Base URL
+- **Local:** `http://127.0.0.1:8000`
+- **Production:** `https://crisissenseai-backend.onrender.com`
+- Auto-detects based on your hostname
 
-## How to Set It Up
+---
 
-1. **Make sure the backend is running** on `http://localhost:8000`
-   - Using a different URL? No problem: `window.CrisisAI.setApiUrl('http://your-url:8000')`
+## 🚀 Setup & Connection
 
-2. **Add this line to your HTML** (we already did it, but just so you know):
-   ```html
-   <script src="frontend/api.js"></script>
+### 1. **Start Your Backend**
+```bash
+cd backend
+python main.py
+```
+The API will run on `http://localhost:8000`
+
+### 2. **Open Frontend in Browser**
+- Simple way: Double-click `homepage.html` or open in your browser
+- Better way: Use a local server (avoids CORS issues)
+  ```bash
+  # Using Python (any version)
+  python -m http.server 8000
+  # Then open http://localhost:8000/CrisisSenseAI_Production/FRONTEND/
+  ```
+
+### 3. **Test the Connection**
+1. Open DevTools (F12)
+2. Go to Console tab
+3. Try this:
+   ```javascript
+   CrisisAI.Auth.isLoggedIn()  // Should return false
    ```
-   That's it! Now your HTML can talk to the API.
+   If it works, you're connected!
 
 
-## How to Use It (Copy-Paste Code)
+---
 
-### Login (Get Into Your Account)
+## 📖 Complete API Reference
+
+### **Auth Module** - `CrisisAI.Auth`
+
+#### Login
 ```javascript
 CrisisAI.Auth.login('user@example.com', 'password')
-  .then(user => {
-    console.log('You in! Welcome:', user.name);
-  })
-  .catch(error => console.log('Oops, login failed:', error.message));
+  .then(user => console.log('Welcome!', user.name))
+  .catch(error => console.log('Error:', error.message));
 ```
 
-### Sign Up (Make a New Account)
+#### Sign Up
 ```javascript
-CrisisAI.Auth.signup(
-  'John Doe',           // your name
-  'john@example.com',   // your email
-  'password123',        // your password
-  '+1234567890',        // phone (optional, skip it if you want)
-  'Mom'                 // emergency contact (optional)
-)
-  .then(result => {
-    console.log('Account made! Now login.');
-  })
-  .catch(error => console.log('Nope, signup failed:', error.message));
+CrisisAI.Auth.signup({ 
+  name: 'John Doe',
+  email: 'john@example.com',
+  password: 'password123',
+  phone: '+1234567890'
+})
+  .then(result => console.log('Account created!'))
+  .catch(error => console.log('Error:', error.message));
 ```
 
-### Send Stuff to Analyze Crisis (Text, Pictures, Audio)
-```javascript
-const textInput = 'Flooding in downtown area';
-const imageFile = document.getElementById('imageInput').files[0];
-const audioFile = document.getElementById('audioInput').files[0];
-
-CrisisAI.Analysis.analyze(textInput, imageFile, audioFile)
-  .then(result => {
-    console.log('Analysis done:', result);
-  })
-  .catch(error => console.log('Analysis failed:', error.message));
-```
-
-### Get Your Profile Info
-```javascript
-CrisisAI.User.getProfile()
-  .then(profile => {
-    console.log('Your profile:', profile);
-  })
-  .catch(error => console.log('Cant get profile:', error.message));
-```
-
-### Check If You're Logged In
+#### Check Login Status
 ```javascript
 if (CrisisAI.Auth.isLoggedIn()) {
   const user = CrisisAI.Auth.getCurrentUser();
-  console.log('Yup, you logged in as:', user.name);
+  console.log('Logged in as:', user.name);
 }
 ```
 
-### Logout (Get Out)
+#### Logout
 ```javascript
-CrisisAI.Auth.logout();
-console.log('Later!');
+CrisisAI.Auth.logout();  // Clears session and reloads page
 ```
 
+---
 
-## Backend Endpoints (Technical Stuff)
+### **User Profile Module** - `CrisisAI.User`
 
-Here's what the backend actually does:
-
-### Login/Register Stuff
-- **POST** `/signup` - Make a new account
-- **POST** `/login` - Log in to your account
-
-### Getting Your Info
-- **GET** `/profile/{user_id}` - Gets all your profile stuff
-
-### Analysis
-- **POST** `/analyze` - Send us a picture/audio/text and we'll analyze it
-
-## How We Remember You (localStorage)
-
-Your info gets saved in browser memory so you don't have to login every time you refresh:
-- `currentUser` - Your name and user ID
-- `apiUrl` - Where your backend is running
-
-## HTML Example (How to Use It In Your Website)
-
-```html
-<form onsubmit="handleLogin(event)">
-  <input type="email" id="email" placeholder="Your email" required>
-  <input type="password" id="password" placeholder="Your password" required>
-  <button type="submit">Login</button>
-</form>
-
-<script>
-  function handleLogin(event) {
-    event.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    
-    CrisisAI.Auth.login(email, password)
-      .then(user => {
-        alert('Welcome back, ' + user.name + '!');
-        // Do whatever you want here - redirect, show stuff, etc
-      })
-      .catch(error => {
-        alert('Uh oh: ' + error.message);
-      });
-  }
-</script>
-```
-
-## Ready-To-Use Functions (Already In main.html)
-
-We set up some quick functions for you:
-
-- `handleLogin(email, password)` - Log in
-- `handleSignup(name, email, password, phone, emergencyContact)` - Create account  
-- `analyzeInput(text, imageFile, audioFile)` - Send stuff to analyze
-- `loadUserProfile()` - Get your profile
-- `loadAlerts()` - Get the alerts list
-- `handleLogout()` - Log out
-
-
-## Handling When Things Go Wrong
-
-When something breaks, you get an error message. Here's what they mean:
-
+#### Get Profile
 ```javascript
-CrisisAI.Auth.login(email, password)
-  .then(user => {
-    // Yay! It worked!
+const userId = CrisisAI.Auth.getCurrentUser().user_id;
+CrisisAI.User.getProfile(userId)
+  .then(profile => {
+    console.log('Blood Group:', profile.blood_group);
+    console.log('Emergency Contact:', profile.emergency_contact);
   })
-  .catch(error => {
-    // Oops, something went wrong
-    console.log(error.message);
-  });
+  .catch(error => console.log('Error:', error.message));
 ```
 
-Common problems:
-- `User not found` - That email doesn't exist. Sign up first!
-- `Invalid credentials` - Wrong password, buddy
-- `Analysis failed` - Something messed up when analyzing. Try again
-- Network error - Your backend ain't running. Start it!
+#### Update Profile
+```javascript
+const userId = CrisisAI.Auth.getCurrentUser().user_id;
+CrisisAI.User.updateProfile(userId, {
+  emergency_contact: 'Mom +1234567890',
+  blood_group: 'O+',
+  medical_notes: 'Allergic to penicillin'
+})
+  .then(result => console.log('Profile updated!'))
+  .catch(error => console.log('Error:', error.message));
+```
 
-## How to Debug When Stuff Breaks
+---
 
-1. **Open DevTools** - Press F12 in your browser
-2. **Go to Console tab** - See all the errors
-3. **Look at Network tab** - See what requests the website is sending
-4. **Check if backend is running** - Go to `http://localhost:8000` in your browser
+### **Analysis Module** - `CrisisAI.Analysis`
 
-### Quick Test With Terminal
+#### Analyze Crisis (Text, Image, Audio)
+```javascript
+const text = 'Flooding in downtown area';
+const imageFile = document.getElementById('imageInput').files[0];
+const audioFile = document.getElementById('audioInput').files[0];
+
+CrisisAI.Analysis.analyze(text, imageFile, audioFile)
+  .then(response => {
+    const result = response.result;
+    console.log('Severity:', result.status_level);  // CRITICAL/URGENT/STABLE
+    console.log('Summary:', result.situation_analysis);
+    console.log('Steps:', result.actionable_steps);
+    console.log('Actions:', result.action_buttons);
+  })
+  .catch(error => console.log('Error:', error.message));
+```
+
+---
+
+### **Emergency Response Module** - `CrisisAI.SOS`
+
+#### Initialize Emergency Session
+```javascript
+const analysisResult = { /* from Analysis.analyze() */ };
+const lat = 40.7128;  // New York
+const lng = -74.0060;
+
+CrisisAI.SOS.init(analysisResult, lat, lng)
+  .then(sos => console.log('SOS initialized:', sos))
+  .catch(error => console.log('Error:', error.message));
+```
+
+#### Execute Emergency Action
+```javascript
+CrisisAI.SOS.executeAgentAction('CALL_AMBULANCE', 'Downtown, Main St')
+  .then(result => console.log('Action executed:', result))
+  .catch(error => console.log('Error:', error.message));
+```
+
+---
+
+## 🛠️ Backend Endpoints Reference
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/users/signup` | POST | Create new account |
+| `/users/login` | POST | Log in to account |
+| `/users/profile/{user_id}` | GET | Fetch user profile |
+| `/users/profile/{user_id}` | PUT | Update user profile |
+| `/analyze` | POST | Analyze crisis (text/image/audio) |
+| `/sos/init` | POST | Initialize SOS session |
+| `/sos/heartbeat/{session_id}` | POST | Send location update |
+| `/sos/execute-agent` | POST | Execute emergency action |
+
+---
+
+## 💾 Browser Storage
+
+Your session is saved in `localStorage`:
+- **`currentUser`** - Logged-in user data (JSON)
+- Used to persist login across page refreshes
+- Cleared on logout
+
+---
+
+## 🎯 Common Issues & Solutions
+
+| Problem | Solution |
+|---------|----------|
+| "Network error" | Start backend: `python main.py` |
+| "User not found" | Sign up first, then login |
+| "Invalid credentials" | Check email/password spelling |
+| CORS errors | Use local server instead of file:// |
+| Camera not working | Check browser permissions |
+| Images not uploading | Check file size (max 5 images) |
+
+---
+
+## 📝 User Journey
+
+```
+START
+  ↓
+[homepage.html] - Landing page
+  ↓
+  User clicks "Login"
+  ↓
+[auth.html] - Login/Signup
+  ├─ New user? → Sign up
+  └─ Existing? → Login
+  ↓
+[index.html] - Main Dashboard
+  ├─ Report incident (photos, audio, text)
+  ├─ AI analysis
+  ├─ View results
+  ├─ Manage profile ("My Profile")
+  └─ Logout
+  ↓
+Back to [auth.html]
+```
+
+---
+
+## ✨ Key Features by Page
+
+### Homepage (`homepage.html`)
+- Landing page with features overview
+- Real-time global incident ticker
+- "How it works" guide
+- Links to login and features
+
+### Auth Page (`auth.html`)
+- Flip-card login/signup forms
+- Global incident briefing sidebar
+- Category filters
+- Auto-redirect if logged in
+
+### Main Dashboard (`index.html`)
+- **Reporting Section:**
+  - Live camera feed
+  - Photo capture & upload (max 5)
+  - Text description
+  - Audio recording
+- **Analysis Results:**
+  - Severity classification
+  - Situation summary
+  - Actionable steps
+  - Manual/Auto action buttons
+- **Profile Management:**
+  - View/edit personal info
+  - Emergency contact
+  - Blood group
+  - Medical notes
+
+---
+
+## 🚀 Quick Start Commands
 
 ```bash
-# Test if login works
-curl -X POST http://localhost:8000/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"user@example.com","password":"pass"}'
+# Start backend
+cd backend
+python main.py
+
+# Serve frontend locally (from root directory)
+python -m http.server 8000
+
+# Then open in browser
+# http://localhost:8000/CrisisSenseAI_Production/FRONTEND/homepage.html
 ```
 
-If you get back JSON, it's working!
+---
 
-## Let's Get Started
+## 📚 For More Details
 
-1. **Start your backend:**
-   ```bash
-   cd backend
-   python main.py
-   ```
-
-2. **Open your website:**
-   - Open `file:///C:/Users/gogoi/CRISIS_AI/main.html` in your browser
-   - Or use a local server
-
-3. **Test it out:**
-   - Open DevTools (F12)
-   - In the Console, try:
-   ```javascript
-   CrisisAI.Auth.signup('test', 'test@test.com', 'pass')
-   ```
-
-4. **Then login:**
-   ```javascript
-   CrisisAI.Auth.login('test@test.com', 'pass')
-   ```
-
-Boom! You're connected!
+See **`FRONTEND_STRUCTURE.md`** for complete file organization and detailed linking map.

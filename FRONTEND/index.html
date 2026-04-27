@@ -5,41 +5,189 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>CrisisSenseAI | Command Center</title>
+   <link rel="stylesheet" href="homepage.css" />
    <link rel="stylesheet" href="style.css">
    <script src="api.js"></script>
+   <style>
+      /* Ensure the container doesn't double-pad the form */
+      .auth-container {
+         padding: 0 !important;
+      }
+
+      /* From Uiverse.io by mahiatlinux */ 
+      .form {
+         display: flex;
+         flex-direction: column;
+         gap: 10px;
+         background-color: #1f1f1f;
+         padding: 30px;
+         width: 100%; /* Changed from 450px to 100% to keep it responsive */
+         border-radius: 20px;
+         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+            Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      }
+
+      .form ::placeholder {
+         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+            Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+         color: #aaa;
+      }
+
+      .form button {
+         align-self: flex-end;
+      }
+
+      .flex-column > label {
+         color: #f1f1f1;
+         font-weight: 600;
+      }
+
+      .inputForm {
+         border: 1.5px solid #333;
+         border-radius: 10px;
+         height: 50px;
+         display: flex;
+         align-items: center;
+         padding-left: 10px;
+         transition: 0.2s ease-in-out;
+         background-color: #2b2b2b;
+      }
+
+      .input {
+         margin-left: 10px;
+         border-radius: 10px;
+         border: none;
+         width: 100%;
+         height: 100%;
+         background-color: #2b2b2b;
+         color: #f1f1f1;
+      }
+
+      .input:focus {
+         outline: none;
+      }
+
+      .inputForm:focus-within {
+         border: 1.5px solid #2d79f3;
+      }
+
+      .flex-row {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         gap: 10px;
+         justify-content: space-between;
+      }
+
+      .flex-row > div > label {
+         font-size: 14px;
+         color: #f1f1f1;
+         font-weight: 400;
+      }
+
+      .span {
+         font-size: 14px;
+         margin-left: 5px;
+         color: #2d79f3;
+         font-weight: 500;
+         cursor: pointer;
+      }
+
+      .button-submit {
+         margin: 20px 0 10px 0;
+         background-color: #2d79f3;
+         border: none;
+         color: white;
+         font-size: 15px;
+         font-weight: 500;
+         border-radius: 10px;
+         height: 50px;
+         width: 100%;
+         cursor: pointer;
+      }
+
+      .p {
+         text-align: center;
+         color: #f1f1f1;
+         font-size: 14px;
+         margin: 5px 0;
+      }
+   </style>
 </head>
 
 <body>
-   <header class="top-nav glass-card">
-      <div class="logo">
-         <span class="logo-mark">◆</span>
-         <span class="logo-text">CrisisSenseAI</span>
+   <header class="site-header">
+      <div class="brand">
+         <span class="brand-mark">◆</span>
+         <strong class="brand-name">CrisisSenseAI</strong>
       </div>
-      <nav class="top-links" id="nav-links" style="display:none;">
-         <button class="top-link active" onclick="showSection('dashboard')">Dashboard</button>
-         <button class="top-link" onclick="showSection('profile')">My Profile</button>
+      <nav class="site-nav" id="nav-links" style="display:none;">
+         <button class="site-nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
+         <a href="scanner.html">Scanner</a>
+         <button class="site-nav-btn" onclick="showSection('profile')">My Profile</button>
       </nav>
-      <button class="profile-btn" id="user-initials" style="display:none;" onclick="handleLogout()">??</button>
+      <div class="site-actions">
+         <button class="profile-btn" id="user-initials" style="display:none;" onclick="handleLogout()">??</button>
+         <a class="btn btn-ghost" href="homepage.html" style="display:none;" id="logout-link">Logout</a>
+      </div>
    </header>
 
    <main class="layout">
-      <section id="auth-section" class="glass-card auth-container">
-         <div class="auth-box">
-            <h2 id="auth-title">System Authentication</h2>
-            <div id="login-form">
-               <input type="email" id="login-email" placeholder="Email">
-               <input type="password" id="login-pass" placeholder="Password">
-               <button class="action-btn primary-btn" onclick="appLogin()">Login</button>
-               <p onclick="toggleAuth(true)" class="toggle-link">New? Signup</p>
+      <section id="auth-section" class="auth-container">
+         <div id="login-form" class="form">
+            <h2 style="color: #f1f1f1; text-align: center; margin-bottom: 10px;">System Authentication</h2>
+            
+            <div class="flex-column">
+               <label>Email</label>
             </div>
-            <div id="signup-form" style="display:none;">
-               <input type="text" id="sig-name" placeholder="Full Name">
-               <input type="email" id="sig-email" placeholder="Email">
-               <input type="password" id="sig-pass" placeholder="Password">
-               <input type="text" id="sig-phone" placeholder="Phone">
-               <button class="action-btn primary-btn" onclick="appSignup()">Register</button>
-               <p onclick="toggleAuth(false)" class="toggle-link">Back to Login</p>
+            <div class="inputForm">
+               <input type="email" class="input" id="login-email" placeholder="Enter your Email">
             </div>
+            
+            <div class="flex-column">
+               <label>Password</label>
+            </div>
+            <div class="inputForm">
+               <input type="password" class="input" id="login-pass" placeholder="Enter your Password">
+            </div>
+            
+            <button class="button-submit" onclick="appLogin()">Login</button>
+            <p class="p">Don't have an account? <span class="span" onclick="toggleAuth(true)">Sign Up</span></p>
+         </div>
+
+         <div id="signup-form" class="form" style="display:none;">
+            <h2 style="color: #f1f1f1; text-align: center; margin-bottom: 10px;">Create an Account</h2>
+            
+            <div class="flex-column">
+               <label>Full Name</label>
+            </div>
+            <div class="inputForm">
+               <input type="text" class="input" id="sig-name" placeholder="Enter your Full Name">
+            </div>
+            
+            <div class="flex-column">
+               <label>Email</label>
+            </div>
+            <div class="inputForm">
+               <input type="email" class="input" id="sig-email" placeholder="Enter your Email">
+            </div>
+            
+            <div class="flex-column">
+               <label>Password</label>
+            </div>
+            <div class="inputForm">
+               <input type="password" class="input" id="sig-pass" placeholder="Enter your Password">
+            </div>
+            
+            <div class="flex-column">
+               <label>Phone</label>
+            </div>
+            <div class="inputForm">
+               <input type="text" class="input" id="sig-phone" placeholder="Enter your Phone">
+            </div>
+            
+            <button class="button-submit" onclick="appSignup()">Register</button>
+            <p class="p">Already have an account? <span class="span" onclick="toggleAuth(false)">Sign In</span></p>
          </div>
       </section>
 
@@ -119,7 +267,6 @@
 
       const isMobile = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-      // --- AUTH ---
       function toggleAuth(isS) {
          document.getElementById('login-form').style.display = isS ? 'none' : 'block';
          document.getElementById('signup-form').style.display = isS ? 'block' : 'none';
@@ -153,7 +300,6 @@
       }
       function handleLogout() { CrisisAI.Auth.logout(); }
 
-      // --- NAVIGATION ---
       async function showSection(name) {
          document.querySelectorAll('main > section').forEach(s => s.style.display = 'none');
          document.getElementById(name + '-section').style.display = 'block';
@@ -189,7 +335,6 @@
          } catch (e) { alert(e.message); }
       }
 
-      // --- MEDIA ---
       async function startCamera() {
          try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
@@ -244,7 +389,6 @@
          }
       }
 
-      // --- ANALYSIS & SOS ---
       async function runAnalysis() {
          const btn = document.getElementById('analyze-btn');
          const text = document.getElementById('emergency-text').value;
@@ -275,12 +419,12 @@
             (data.status_level === 'URGENT') ? 'severity-urgent' : 'severity-stable';
 
          area.innerHTML = `
-            <div class="result-card glass-card incident-pulse">
+            <div class="result-card glass incident-pulse">
                <h3 class="${statusClass}">MODE: ${data.status_level}</h3>
                <p class="summary">"${data.situation_analysis}"</p>
                <div class="survival-steps"><h4>Directives:</h4><ul id="steps-list"></ul></div>
                <div class="actions-grid" id="btns-list"></div>
-               <div id="first-aid-display" class="first-aid-container glass-card" style="display:none; margin-top:20px; padding:15px; border:1px solid #007bff;"></div>
+               <div id="first-aid-display" class="first-aid-container glass" style="display:none; margin-top:20px; padding:15px; border:1px solid #007bff;"></div>
             </div>
          `;
          (data.actionable_steps || []).forEach(s => {
@@ -304,20 +448,14 @@
          });
       }
 
-      /**
-       * MANUAL ROUTING FIX: Added specific check for FIRE to trigger dialer.
-       */
       function handleManual(action) {
          const normalized = action.toUpperCase().replace(/_/g, ' ');
          if (normalized.includes('AMBULANCE')) window.location.href = `tel:102`;
          else if (normalized.includes('POLICE')) window.location.href = `tel:100`;
-         else if (normalized.includes('FIRE')) window.location.href = `tel:101`; // Fix for your screenshot
+         else if (normalized.includes('FIRE')) window.location.href = `tel:101`;
          else alert("Manual routing initiated for: " + action);
       }
 
-      /**
-       * AUTO AGENT FIX: Shows 'message' from backend instead of 'undefined'.
-       */
       async function handleAuto(action) {
          const normalized = action.toUpperCase().replace(/_/g, ' ');
          if (normalized.includes('FIRST AID')) {
@@ -328,7 +466,6 @@
          } else {
             try {
                const res = await CrisisAI.SOS.executeAgentAction(action, "Current Location");
-               // Fix: Look for 'message' or 'status' in the response object
                const msg = res.message || res.status || res.result || "Action Processed";
                alert("🤖 Agent Action: " + msg);
             } catch (e) { alert("Agent Error: " + e.message); }

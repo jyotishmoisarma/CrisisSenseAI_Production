@@ -2,478 +2,247 @@
 <html lang="en">
 
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>CrisisSenseAI | Command Center</title>
-   <link rel="stylesheet" href="homepage.css" />
-   <link rel="stylesheet" href="style.css">
-   <script src="api.js"></script>
-   <style>
-      /* Ensure the container doesn't double-pad the form */
-      .auth-container {
-         padding: 0 !important;
-      }
-
-      /* From Uiverse.io by mahiatlinux */ 
-      .form {
-         display: flex;
-         flex-direction: column;
-         gap: 10px;
-         background-color: #1f1f1f;
-         padding: 30px;
-         width: 100%; /* Changed from 450px to 100% to keep it responsive */
-         border-radius: 20px;
-         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-            Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-      }
-
-      .form ::placeholder {
-         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-            Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-         color: #aaa;
-      }
-
-      .form button {
-         align-self: flex-end;
-      }
-
-      .flex-column > label {
-         color: #f1f1f1;
-         font-weight: 600;
-      }
-
-      .inputForm {
-         border: 1.5px solid #333;
-         border-radius: 10px;
-         height: 50px;
-         display: flex;
-         align-items: center;
-         padding-left: 10px;
-         transition: 0.2s ease-in-out;
-         background-color: #2b2b2b;
-      }
-
-      .input {
-         margin-left: 10px;
-         border-radius: 10px;
-         border: none;
-         width: 100%;
-         height: 100%;
-         background-color: #2b2b2b;
-         color: #f1f1f1;
-      }
-
-      .input:focus {
-         outline: none;
-      }
-
-      .inputForm:focus-within {
-         border: 1.5px solid #2d79f3;
-      }
-
-      .flex-row {
-         display: flex;
-         flex-direction: row;
-         align-items: center;
-         gap: 10px;
-         justify-content: space-between;
-      }
-
-      .flex-row > div > label {
-         font-size: 14px;
-         color: #f1f1f1;
-         font-weight: 400;
-      }
-
-      .span {
-         font-size: 14px;
-         margin-left: 5px;
-         color: #2d79f3;
-         font-weight: 500;
-         cursor: pointer;
-      }
-
-      .button-submit {
-         margin: 20px 0 10px 0;
-         background-color: #2d79f3;
-         border: none;
-         color: white;
-         font-size: 15px;
-         font-weight: 500;
-         border-radius: 10px;
-         height: 50px;
-         width: 100%;
-         cursor: pointer;
-      }
-
-      .p {
-         text-align: center;
-         color: #f1f1f1;
-         font-size: 14px;
-         margin: 5px 0;
-      }
-   </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrisisSenseAI | Homepage</title>
+  <link rel="stylesheet" href="index.css" />
 </head>
 
-<body>
-   <header class="site-header">
-      <div class="brand">
-         <span class="brand-mark">◆</span>
-         <strong class="brand-name">CrisisSenseAI</strong>
+<body id="top">
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark">◆</span>
+      <strong class="brand-name">CrisisSenseAI</strong>
+    </div>
+
+    <nav class="site-nav">
+      <a href="main.html">Analyze</a>
+      <a href="#how">How it works</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="site-actions">
+      <a class="btn btn-ghost" href="dashboard.html">Login</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-copy glass">
+            <p class="pill">Operational awareness • AI triage • Faster response</p>
+            <h1>Real-Time Crisis Intelligence</h1>
+            <p class="lead">
+              Monitor, analyze, and respond to emergencies faster with AI-powered insights.
+              Built for responders, operators, and decision makers.
+            </p>
+
+            <div class="metrics">
+              <div class="metric glass">
+                <div class="k">Multi-modal</div>
+                <div class="t">Text • photo • audio intake</div>
+              </div>
+              <div class="metric glass">
+                <div class="k">Triage-ready</div>
+                <div class="t">Severity & action cues</div>
+              </div>
+              <div class="metric glass">
+                <div class="k">Operator-first</div>
+                <div class="t">Clean, fast UI</div>
+              </div>
+            </div>
+          </div>
+
+          <aside class="hero-panel glass">
+            <h2 class="panel-title">Today’s Brief</h2>
+            <ul class="panel-list">
+              <li>Consolidate incident reports into one operational view.</li>
+              <li>Speed up dispatch decisions with AI-assisted summaries.</li>
+              <li>Keep teams aligned with a consistent triage workflow.</li>
+            </ul>
+            <div class="panel-actions">
+              <a class="btn btn-ghost" href="#features">Explore features</a>
+            </div>
+          </aside>
+        </div>
       </div>
-      <nav class="site-nav" id="nav-links" style="display:none;">
-         <button class="site-nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
-         <a href="scanner.html">Scanner</a>
-         <button class="site-nav-btn" onclick="showSection('profile')">My Profile</button>
-      </nav>
-      <div class="site-actions">
-         <button class="profile-btn" id="user-initials" style="display:none;" onclick="handleLogout()">??</button>
-         <a class="btn btn-ghost" href="homepage.html" style="display:none;" id="logout-link">Logout</a>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Recent Global Highlights</h2>
+          <p class="section-sub">Continuous incident headlines (two lanes), curated for rapid situational awareness.</p>
+        </div>
+
+        <div class="marquee glass" aria-label="Recent global incident headlines">
+          <div class="lanes">
+            <div class="lane lane-rtl">
+              <div class="track animate dir-rtl" id="cap-track-rtl"></div>
+            </div>
+            <div class="lane lane-ltr">
+              <div class="track animate dir-ltr" id="cap-track-ltr"></div>
+            </div>
+          </div>
+        </div>
       </div>
-   </header>
+    </section>
 
-   <main class="layout">
-      <section id="auth-section" class="auth-container">
-         <div id="login-form" class="form">
-            <h2 style="color: #f1f1f1; text-align: center; margin-bottom: 10px;">System Authentication</h2>
-            
-            <div class="flex-column">
-               <label>Email</label>
-            </div>
-            <div class="inputForm">
-               <input type="email" class="input" id="login-email" placeholder="Enter your Email">
-            </div>
-            
-            <div class="flex-column">
-               <label>Password</label>
-            </div>
-            <div class="inputForm">
-               <input type="password" class="input" id="login-pass" placeholder="Enter your Password">
-            </div>
-            
-            <button class="button-submit" onclick="appLogin()">Login</button>
-            <p class="p">Don't have an account? <span class="span" onclick="toggleAuth(true)">Sign Up</span></p>
-         </div>
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-head">
+          <h2>Features</h2>
+          <p class="section-sub">Everything you need to move from report → understanding → action.</p>
+        </div>
 
-         <div id="signup-form" class="form" style="display:none;">
-            <h2 style="color: #f1f1f1; text-align: center; margin-bottom: 10px;">Create an Account</h2>
-            
-            <div class="flex-column">
-               <label>Full Name</label>
-            </div>
-            <div class="inputForm">
-               <input type="text" class="input" id="sig-name" placeholder="Enter your Full Name">
-            </div>
-            
-            <div class="flex-column">
-               <label>Email</label>
-            </div>
-            <div class="inputForm">
-               <input type="email" class="input" id="sig-email" placeholder="Enter your Email">
-            </div>
-            
-            <div class="flex-column">
-               <label>Password</label>
-            </div>
-            <div class="inputForm">
-               <input type="password" class="input" id="sig-pass" placeholder="Enter your Password">
-            </div>
-            
-            <div class="flex-column">
-               <label>Phone</label>
-            </div>
-            <div class="inputForm">
-               <input type="text" class="input" id="sig-phone" placeholder="Enter your Phone">
-            </div>
-            
-            <button class="button-submit" onclick="appSignup()">Register</button>
-            <p class="p">Already have an account? <span class="span" onclick="toggleAuth(false)">Sign In</span></p>
-         </div>
-      </section>
+        <div class="features-grid">
+          <article class="feature-card glass">
+            <h3 class="feature-title">Incident Reporting</h3>
+            <p class="feature-text">Capture images, attach context, and submit field-ready reports in seconds.</p>
+          </article>
+          <article class="feature-card glass">
+            <h3 class="feature-title">AI Situation Summary</h3>
+            <p class="feature-text">Condense noisy inputs into clear, decision-oriented briefings.</p>
+          </article>
+          <article class="feature-card glass">
+            <h3 class="feature-title">Severity & Triage</h3>
+            <p class="feature-text">Classify urgency with consistent labels and suggested next steps.</p>
+          </article>
+          <article class="feature-card glass">
+            <h3 class="feature-title">Operator UI</h3>
+            <p class="feature-text">Built for speed: readable layout, minimal friction, high signal density.</p>
+          </article>
+          <article class="feature-card glass">
+            <h3 class="feature-title">Profile & Medical Info</h3>
+            <p class="feature-text">Maintain key profile details to support responders during escalation.</p>
+          </article>
+          <article class="feature-card glass">
+            <h3 class="feature-title">Expandable Architecture</h3>
+            <p class="feature-text">Ready for maps, feeds, integrations, and alerts as your system evolves.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-      <section id="dashboard-section" style="display:none;">
-         <div class="emergency-input glass-card">
-            <h2>🚨 Immediate Incident Reporting</h2>
-            <div class="camera-wrapper">
-               <div class="camera-container">
-                  <video id="camera-stream" autoplay playsinline muted></video>
-               </div>
-               <button class="snap-btn" onclick="takePhoto()" title="Capture Moment"></button>
+    <section class="section" id="how">
+      <div class="container">
+        <div class="section-head">
+          <h2>How it works</h2>
+          <p class="section-sub">A practical workflow tuned for crisis operations.</p>
+        </div>
+
+        <div class="steps">
+          <div class="step glass">
+            <div class="step-num">01</div>
+            <h3 class="step-title">Report</h3>
+            <p class="step-text">Enter a description and attach media (camera/gallery/audio) as needed.</p>
+          </div>
+          <div class="step glass">
+            <div class="step-num">02</div>
+            <h3 class="step-title">Analyze</h3>
+            <p class="step-text">AI pre-processes inputs to extract key details and urgency indicators.</p>
+          </div>
+          <div class="step glass">
+            <div class="step-num">03</div>
+            <h3 class="step-title">Act</h3>
+            <p class="step-text">Review results, coordinate response, and keep a consistent audit trail.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="section-head">
+          <h2>Contact</h2>
+          <p class="section-sub">Want this tailored to your org’s workflows? Let’s talk.</p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-card glass">
+            <h3 class="contact-title">CrisisSenseAI</h3>
+            <p class="contact-text">Security-first, operator-first tooling for fast-changing environments.</p>
+            <div class="contact-meta">
+              <div><span class="label">Email</span> <span class="value">support@crisissenseai.local</span></div>
+              <div><span class="label">Demo</span> <span class="value"><a href="dashboard.html">Open the Command
+                    Center</a></span></div>
             </div>
-            <div class="thumbnail-bar" id="thumbnail-bar"></div>
-            <div class="unified-input-group">
-               <button class="plus-icon-btn" onclick="document.getElementById('gallery-input').click()">+</button>
-               <input type="file" id="gallery-input" accept="image/*" multiple style="display:none"
-                  onchange="handleGalleryUpload(event)">
-               <textarea id="emergency-text" placeholder="Describe the crisis..."></textarea>
-               <button class="mic-icon-btn" id="mic-btn" onclick="toggleRecording()">🎤</button>
+          </div>
+
+          <div class="contact-card glass">
+            <h3 class="contact-title">Quick Links</h3>
+            <div class="quick-links">
+              <a class="btn btn-ghost" href="auth.html">Login</a>
+              <a class="btn btn-ghost" href="#top"
+                onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">Back to top</a>
             </div>
-            <button class="action-btn danger-btn" id="analyze-btn" onclick="runAnalysis()">Dispatch AI
-               Commander</button>
+            <p class="contact-footnote">If you don’t have auth.html wired yet, point “Login” to your auth route.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-            <div id="analysis-status" style="display:none; margin-top:15px;">
-               <p id="status-visual">⚪ Visual/Text Pre-processing...</p>
-               <p id="status-audio">⚪ Audio Transcription & Forensics...</p>
-               <p id="status-triage">⚪ Final Triage Decision...</p>
-            </div>
-         </div>
-         <div id="results-area" class="results-container"></div>
-      </section>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© 2026 CrisisSenseAI</span>
+      <span class="footer-muted">Real-Time Crisis Intelligence</span>
+    </div>
+  </footer>
 
-      <section id="profile-section" class="glass-card" style="display:none;">
-         <div class="profile-header">
-            <h2>Medical Profile & Database</h2>
-            <button id="edit-toggle-btn" class="action-btn secondary-btn" onclick="toggleProfileEdit()">Edit
-               Profile</button>
-         </div>
-         <div class="profile-content">
-            <div id="profile-view-mode">
-               <div class="info-item"><strong>Emergency Contact:</strong> <span id="view-contact">Loading...</span>
-               </div>
-               <div class="info-item"><strong>Blood Group:</strong> <span id="view-blood">Loading...</span></div>
-               <div class="info-item"><strong>Medical History:</strong>
-                  <p id="view-notes">Loading...</p>
-               </div>
-               <div class="info-item"><strong>Live Location Tracking:</strong> <span id="view-tracking">No</span></div>
-            </div>
-            <div id="profile-edit-mode" style="display:none;">
-               <div class="profile-grid">
-                  <input type="text" id="prof-contact" placeholder="Emergency Phone">
-                  <select id="prof-blood">
-                     <option value="A+">A+</option>
-                     <option value="O+">O+</option>
-                     <option value="B+">B+</option>
-                     <option value="AB+">AB+</option>
-                  </select>
-                  <textarea id="prof-notes" placeholder="List allergies..."></textarea>
-                  <div class="btn-row">
-                     <button class="action-btn success-btn" onclick="saveProfile()">Save Changes</button>
-                     <button class="action-btn" onclick="toggleProfileEdit(false)">Cancel</button>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </section>
-   </main>
+  <script>
+    const incidents = [
+      { location: 'Japan (Apr 20)', category: 'Seismic', severity: 5, text: 'M7.5 earthquake in the northeast; tsunami warnings issued.' },
+      { location: 'Indonesia (Apr 2)', category: 'Seismic', severity: 5, text: 'M7.3 event in North Sulawesi; casualties and damage reported.' },
+      { location: 'Ethiopia (Mar 10)', category: 'Flooding', severity: 5, text: 'Landslides and floods in Gammo Zone; significant loss of life and homes.' },
+      { location: 'Afghanistan (Mar–Apr)', category: 'Flooding', severity: 5, text: 'Flash floods across multiple provinces; fatalities and widespread impact.' },
+      { location: 'Solomon Islands (Apr 6)', category: 'Storm', severity: 5, text: 'Tropical Cyclone conditions; high winds and coastal risk.' },
+      { location: 'USA (Mar 17–26)', category: 'Storm', severity: 5, text: 'Tornado outbreak across the South; neighborhood destruction reported.' },
+      { location: 'Chile (Jan–Feb)', category: 'Wildfire', severity: 5, text: 'Large forest fires; casualties and hundreds of homes affected.' },
+      { location: 'Malaysia (Apr 22)', category: 'Wildfire', severity: 4, text: 'Wind-driven fire destroyed large numbers of homes in affected areas.' },
+      { location: 'Bangladesh (Mar–Apr)', category: 'Health', severity: 4, text: 'Outbreak risk worsened by displacement; urgent response needed.' },
+      { location: 'France (Jan)', category: 'Storm', severity: 3, text: 'Windstorms contributed to flooding and coastal erosion in parts of Europe.' }
+    ];
 
-   <script>
-      let isEditing = false;
-      let latestAnalysis = null;
-      let capturedImages = [];
-      let audioBlob = null;
-      let mediaRecorder = null;
-      let audioChunks = [];
-      let currentLat = 0, currentLng = 0;
+    function severityLabel(severity) {
+      if (severity >= 5) return 'Critical';
+      if (severity === 4) return 'High';
+      if (severity === 3) return 'Medium';
+      return 'Low';
+    }
 
-      const isMobile = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    function severityClass(severity) {
+      if (severity >= 5) return 'critical';
+      if (severity === 4) return 'high';
+      if (severity === 3) return 'medium';
+      return 'low';
+    }
 
-      function toggleAuth(isS) {
-         document.getElementById('login-form').style.display = isS ? 'none' : 'block';
-         document.getElementById('signup-form').style.display = isS ? 'block' : 'none';
-      }
-      async function appSignup() {
-         const name = document.getElementById('sig-name').value;
-         const email = document.getElementById('sig-email').value;
-         const pass = document.getElementById('sig-pass').value;
-         const phone = document.getElementById('sig-phone').value;
-         try {
-            await CrisisAI.Auth.signup({ name, email, password: pass, phone });
-            alert("✅ Registration successful!"); toggleAuth(false);
-         } catch (e) { alert(e.message); }
-      }
-      async function appLogin() {
-         const email = document.getElementById('login-email').value;
-         const pass = document.getElementById('login-pass').value;
-         try {
-            await CrisisAI.Auth.login(email, pass);
-            showAuthenticatedUI();
-         } catch (e) { alert(e.message); }
-      }
-      function showAuthenticatedUI() {
-         document.getElementById('auth-section').style.display = 'none';
-         document.getElementById('dashboard-section').style.display = 'block';
-         document.getElementById('nav-links').style.display = 'flex';
-         const user = CrisisAI.Auth.getCurrentUser();
-         document.getElementById('user-initials').style.display = 'block';
-         document.getElementById('user-initials').innerText = user.name[0].toUpperCase();
-         startCamera();
-      }
-      function handleLogout() { CrisisAI.Auth.logout(); }
+    function slideMarkup(item) {
+      const sevLabel = severityLabel(item.severity);
+      const sevClass = severityClass(item.severity);
 
-      async function showSection(name) {
-         document.querySelectorAll('main > section').forEach(s => s.style.display = 'none');
-         document.getElementById(name + '-section').style.display = 'block';
-         if (name === 'profile') await loadProfileData();
-         document.querySelectorAll('.top-link').forEach(el => el.classList.remove('active'));
-         document.querySelector(`button[onclick*="${name}"]`).classList.add('active');
-      }
-      async function loadProfileData() {
-         const user = CrisisAI.Auth.getCurrentUser();
-         try {
-            const profile = await CrisisAI.User.getProfile(user.user_id || user.id);
-            document.getElementById('view-contact').innerText = profile.emergency_contact || "None";
-            document.getElementById('view-blood').innerText = profile.blood_group || "Unknown";
-            document.getElementById('view-notes').innerText = profile.medical_notes || "None";
-            document.getElementById('view-tracking').innerText = profile.allow_location_tracking ? "Yes" : "No";
-         } catch (e) { console.error(e); }
-      }
-      function toggleProfileEdit(s) {
-         isEditing = s !== undefined ? s : !isEditing;
-         document.getElementById('profile-view-mode').style.display = isEditing ? 'none' : 'block';
-         document.getElementById('profile-edit-mode').style.display = isEditing ? 'block' : 'none';
-      }
-      async function saveProfile() {
-         const user = CrisisAI.Auth.getCurrentUser();
-         const data = {
-            emergency_contact: document.getElementById('prof-contact').value,
-            blood_group: document.getElementById('prof-blood').value,
-            medical_notes: document.getElementById('prof-notes').value
-         };
-         try {
-            await CrisisAI.User.updateProfile(user.user_id || user.id, data);
-            alert("✅ Profile Synced"); await loadProfileData(); toggleProfileEdit(false);
-         } catch (e) { alert(e.message); }
+      return `\n        <article class="slide severity-${sevClass}">\n          <div class="slide-top">\n            <div class="badge">${item.category}</div>\n            <div class="sev">${sevLabel}</div>\n          </div>\n          <h3>${item.location}</h3>\n          <p>${item.text}</p>\n        </article>\n      `;
+    }
+
+    function renderMarquee(trackId, items) {
+      const el = document.getElementById(trackId);
+      if (!el) return;
+      const once = items.map(slideMarkup).join('');
+      el.innerHTML = once + once;
+    }
+
+    (function initMarquee() {
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) {
+        document.querySelectorAll('.track.animate').forEach(t => t.classList.remove('animate'));
       }
 
-      async function startCamera() {
-         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-            document.getElementById('camera-stream').srcObject = stream;
-         } catch (e) { console.warn("Camera access denied."); }
-      }
-      function takePhoto() {
-         if (capturedImages.length >= 5) return alert("Limit 5");
-         const video = document.getElementById('camera-stream');
-         const canvas = document.createElement('canvas');
-         canvas.width = 480; canvas.height = 480;
-         canvas.getContext('2d').drawImage(video, 0, 0, 480, 480);
-         canvas.toBlob(blob => {
-            const url = URL.createObjectURL(blob);
-            capturedImages.push({ url, blob });
-            renderGallery();
-         }, 'image/jpeg');
-      }
-      function handleGalleryUpload(e) {
-         for (let file of e.target.files) {
-            if (capturedImages.length >= 5) break;
-            capturedImages.push({ url: URL.createObjectURL(file), blob: file });
-         }
-         renderGallery();
-         e.target.value = "";
-      }
-      function renderGallery() {
-         const bar = document.getElementById('thumbnail-bar');
-         bar.innerHTML = capturedImages.map((img, i) => `
-            <div class="thumb-container">
-               <img src="${img.url}" class="gallery-thumb">
-               <button class="remove-btn" onclick="removePhoto(${i})">×</button>
-            </div>
-         `).join('');
-      }
-      function removePhoto(i) {
-         URL.revokeObjectURL(capturedImages[i].url);
-         capturedImages.splice(i, 1);
-         renderGallery();
-      }
-      async function toggleRecording() {
-         const btn = document.getElementById('mic-btn');
-         if (mediaRecorder && mediaRecorder.state === "recording") {
-            mediaRecorder.stop(); btn.innerText = "🎤";
-         } else {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder = new MediaRecorder(stream);
-            audioChunks = [];
-            mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-            mediaRecorder.onstop = () => audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-            mediaRecorder.start(); btn.innerText = "⏹️";
-         }
-      }
-
-      async function runAnalysis() {
-         const btn = document.getElementById('analyze-btn');
-         const text = document.getElementById('emergency-text').value;
-         if (!text && capturedImages.length === 0 && !audioBlob) return alert("Add data to analyze.");
-
-         btn.innerText = "Dispatching AI Commander..."; btn.disabled = true;
-         document.getElementById('analysis-status').style.display = "block";
-
-         try {
-            const primaryImg = capturedImages.length > 0 ? capturedImages[0].blob : null;
-            const response = await CrisisAI.Analysis.analyze(text, primaryImg, audioBlob);
-            latestAnalysis = response.result;
-            renderResults(latestAnalysis);
-
-            if (latestAnalysis.status_level !== 'STABLE') {
-               navigator.geolocation.getCurrentPosition(p => {
-                  currentLat = p.coords.latitude; currentLng = p.coords.longitude;
-                  CrisisAI.SOS.init(latestAnalysis, currentLat, currentLng).then(sos => enableAutoButtons());
-               });
-            }
-         } catch (e) { alert("Pipeline Error: " + e.message); }
-         finally { btn.innerText = "Dispatch AI Commander"; btn.disabled = false; }
-      }
-
-      function renderResults(data) {
-         const area = document.getElementById('results-area');
-         const statusClass = (data.status_level === 'CRITICAL') ? 'severity-critical' :
-            (data.status_level === 'URGENT') ? 'severity-urgent' : 'severity-stable';
-
-         area.innerHTML = `
-            <div class="result-card glass incident-pulse">
-               <h3 class="${statusClass}">MODE: ${data.status_level}</h3>
-               <p class="summary">"${data.situation_analysis}"</p>
-               <div class="survival-steps"><h4>Directives:</h4><ul id="steps-list"></ul></div>
-               <div class="actions-grid" id="btns-list"></div>
-               <div id="first-aid-display" class="first-aid-container glass" style="display:none; margin-top:20px; padding:15px; border:1px solid #007bff;"></div>
-            </div>
-         `;
-         (data.actionable_steps || []).forEach(s => {
-            const li = document.createElement('li'); li.innerText = s;
-            document.getElementById('steps-list').appendChild(li);
-         });
-         (data.action_buttons || []).forEach((b, i) => {
-            const box = document.createElement('div'); box.className = "action-box";
-            box.innerHTML = `<h5>${b.replace(/_/g, ' ')}</h5>
-               <div class="btn-row">
-                  <button class="manual-btn" onclick="handleManual('${b}')">Manual</button>
-                  <button class="auto-btn loading-state" disabled onclick="handleAuto('${b}')">Loading AI...</button>
-               </div>`;
-            document.getElementById('btns-list').appendChild(box);
-         });
-      }
-
-      function enableAutoButtons() {
-         document.querySelectorAll('.auto-btn').forEach(btn => {
-            btn.classList.remove('loading-state'); btn.disabled = false; btn.innerText = "AI Auto";
-         });
-      }
-
-      function handleManual(action) {
-         const normalized = action.toUpperCase().replace(/_/g, ' ');
-         if (normalized.includes('AMBULANCE')) window.location.href = `tel:102`;
-         else if (normalized.includes('POLICE')) window.location.href = `tel:100`;
-         else if (normalized.includes('FIRE')) window.location.href = `tel:101`;
-         else alert("Manual routing initiated for: " + action);
-      }
-
-      async function handleAuto(action) {
-         const normalized = action.toUpperCase().replace(/_/g, ' ');
-         if (normalized.includes('FIRST AID')) {
-            const display = document.getElementById('first-aid-display');
-            display.style.display = 'block';
-            display.innerHTML = `<h4>🛡️ AI First Aid Protocol:</h4><p style="white-space: pre-line;">${latestAnalysis.first_aid_details || 'Safety first.'}</p>`;
-            display.scrollIntoView({ behavior: 'smooth' });
-         } else {
-            try {
-               const res = await CrisisAI.SOS.executeAgentAction(action, "Current Location");
-               const msg = res.message || res.status || res.result || "Action Processed";
-               alert("🤖 Agent Action: " + msg);
-            } catch (e) { alert("Agent Error: " + e.message); }
-         }
-      }
-
-      window.onload = () => { if (typeof CrisisAI !== 'undefined' && CrisisAI.Auth.isLoggedIn()) showAuthenticatedUI(); };
-   </script>
+      renderMarquee('cap-track-rtl', incidents);
+      renderMarquee('cap-track-ltr', [...incidents].reverse());
+    })();
+  </script>
 </body>
 
 </html>

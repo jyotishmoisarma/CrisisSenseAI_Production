@@ -2,233 +2,477 @@
 <html lang="en">
 
 <head>
-   <meta charset="UTF-8" />
-   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <title>CrisisSenseAI | Authentication</title>
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>CrisisSenseAI | Command Center</title>
    <link rel="stylesheet" href="homepage.css" />
-   <link rel="stylesheet" href="auth-refactored.css" />
+   <link rel="stylesheet" href="style.css">
    <script src="api.js"></script>
+   <style>
+      /* Ensure the container doesn't double-pad the form */
+      .auth-container {
+         padding: 0 !important;
+      }
+
+      /* From Uiverse.io by mahiatlinux */ 
+      .form {
+         display: flex;
+         flex-direction: column;
+         gap: 10px;
+         background-color: #1f1f1f;
+         padding: 30px;
+         width: 100%; /* Changed from 450px to 100% to keep it responsive */
+         border-radius: 20px;
+         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+            Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      }
+
+      .form ::placeholder {
+         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+            Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+         color: #aaa;
+      }
+
+      .form button {
+         align-self: flex-end;
+      }
+
+      .flex-column > label {
+         color: #f1f1f1;
+         font-weight: 600;
+      }
+
+      .inputForm {
+         border: 1.5px solid #333;
+         border-radius: 10px;
+         height: 50px;
+         display: flex;
+         align-items: center;
+         padding-left: 10px;
+         transition: 0.2s ease-in-out;
+         background-color: #2b2b2b;
+      }
+
+      .input {
+         margin-left: 10px;
+         border-radius: 10px;
+         border: none;
+         width: 100%;
+         height: 100%;
+         background-color: #2b2b2b;
+         color: #f1f1f1;
+      }
+
+      .input:focus {
+         outline: none;
+      }
+
+      .inputForm:focus-within {
+         border: 1.5px solid #2d79f3;
+      }
+
+      .flex-row {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         gap: 10px;
+         justify-content: space-between;
+      }
+
+      .flex-row > div > label {
+         font-size: 14px;
+         color: #f1f1f1;
+         font-weight: 400;
+      }
+
+      .span {
+         font-size: 14px;
+         margin-left: 5px;
+         color: #2d79f3;
+         font-weight: 500;
+         cursor: pointer;
+      }
+
+      .button-submit {
+         margin: 20px 0 10px 0;
+         background-color: #2d79f3;
+         border: none;
+         color: white;
+         font-size: 15px;
+         font-weight: 500;
+         border-radius: 10px;
+         height: 50px;
+         width: 100%;
+         cursor: pointer;
+      }
+
+      .p {
+         text-align: center;
+         color: #f1f1f1;
+         font-size: 14px;
+         margin: 5px 0;
+      }
+   </style>
 </head>
 
 <body>
-
-   <div class="incident-carousel">
-      <div class="carousel-track" id="carousel-track">
-
-      </div>
-   </div>
-
    <header class="site-header">
       <div class="brand">
          <span class="brand-mark">◆</span>
          <strong class="brand-name">CrisisSenseAI</strong>
       </div>
-      <nav class="site-nav">
-         <a href="homepage.html">Home</a>
+      <nav class="site-nav" id="nav-links" style="display:none;">
+         <button class="site-nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
+         <a href="scanner.html">Scanner</a>
+         <button class="site-nav-btn" onclick="showSection('profile')">My Profile</button>
       </nav>
       <div class="site-actions">
-         <a class="btn btn-ghost" href="homepage.html">Back</a>
+         <button class="profile-btn" id="user-initials" style="display:none;" onclick="handleLogout()">??</button>
+         <a class="btn btn-ghost" href="homepage.html" style="display:none;" id="logout-link">Logout</a>
       </div>
    </header>
 
-   <main class="auth-container">
-      <section class="news-panel">
-         <div class="news-header">
-            <p class="news-kicker">CrisisSenseAI Briefing</p>
-            <h2>Recent Global Incident Highlights</h2>
-            <p class="news-intro">Priority updates from active events worldwide, curated for rapid situational
-               awareness.</p>
-         </div>
-         <div class="filter-tabs">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="Seismic">Seismic</button>
-            <button class="filter-btn" data-filter="Flooding">Flooding</button>
-            <button class="filter-btn" data-filter="Storm">Storm</button>
-            <button class="filter-btn" data-filter="Wildfire">Fire</button>
-         </div>
-         <div class="news-carousel" aria-label="CrisisSenseAI headline ticker">
-            <div class="news-lane lane-rtl">
-               <div class="news-track animate dir-rtl" id="news-track-rtl"></div>
+   <main class="layout">
+      <section id="auth-section" class="auth-container">
+         <div id="login-form" class="form">
+            <h2 style="color: #f1f1f1; text-align: center; margin-bottom: 10px;">System Authentication</h2>
+            
+            <div class="flex-column">
+               <label>Email</label>
             </div>
-            <div class="news-lane lane-ltr">
-               <div class="news-track animate dir-ltr" id="news-track-ltr"></div>
+            <div class="inputForm">
+               <input type="email" class="input" id="login-email" placeholder="Enter your Email">
             </div>
+            
+            <div class="flex-column">
+               <label>Password</label>
+            </div>
+            <div class="inputForm">
+               <input type="password" class="input" id="login-pass" placeholder="Enter your Password">
+            </div>
+            
+            <button class="button-submit" onclick="appLogin()">Login</button>
+            <p class="p">Don't have an account? <span class="span" onclick="toggleAuth(true)">Sign Up</span></p>
+         </div>
+
+         <div id="signup-form" class="form" style="display:none;">
+            <h2 style="color: #f1f1f1; text-align: center; margin-bottom: 10px;">Create an Account</h2>
+            
+            <div class="flex-column">
+               <label>Full Name</label>
+            </div>
+            <div class="inputForm">
+               <input type="text" class="input" id="sig-name" placeholder="Enter your Full Name">
+            </div>
+            
+            <div class="flex-column">
+               <label>Email</label>
+            </div>
+            <div class="inputForm">
+               <input type="email" class="input" id="sig-email" placeholder="Enter your Email">
+            </div>
+            
+            <div class="flex-column">
+               <label>Password</label>
+            </div>
+            <div class="inputForm">
+               <input type="password" class="input" id="sig-pass" placeholder="Enter your Password">
+            </div>
+            
+            <div class="flex-column">
+               <label>Phone</label>
+            </div>
+            <div class="inputForm">
+               <input type="text" class="input" id="sig-phone" placeholder="Enter your Phone">
+            </div>
+            
+            <button class="button-submit" onclick="appSignup()">Register</button>
+            <p class="p">Already have an account? <span class="span" onclick="toggleAuth(false)">Sign In</span></p>
          </div>
       </section>
-      <section class="container">
-         <input type="checkbox" id="signup_toggle" />
-         <div class="form">
-            <form class="form_front" id="loginFormAuth">
-               <p class="form-section-heading">Choose your path:</p>
-               <div class="analyze-wrapper">
-                  <button class="analyze-btn" title="You are using direct access without login">Analyze
-                     Directly</button>
+
+      <section id="dashboard-section" style="display:none;">
+         <div class="emergency-input glass-card">
+            <h2>🚨 Immediate Incident Reporting</h2>
+            <div class="camera-wrapper">
+               <div class="camera-container">
+                  <video id="camera-stream" autoplay playsinline muted></video>
                </div>
-               <button type="button" class="btn login-signup-redirect-btn" id="loginSignupRedirectBtn">Login / Sign
-                  Up</button>
-            </form>
-            <form class="form_back" id="signupFormAuth">
-               <div class="form_details">Sign Up</div>
-               <input type="text" id="signupNameAuth" class="input" placeholder="Full Name" required />
-               <input type="email" id="signupEmailAuth" class="input" placeholder="Email Address" required />
-               <input type="password" id="signupPasswordAuth" class="input" placeholder="Password" required />
-               <input type="password" id="signupConfirmPasswordAuth" class="input" placeholder="Confirm Password"
-                  required />
-               <button type="submit" class="btn">Create Account</button>
-               <span class="switch">Already have an account?
-                  <label for="signup_toggle" class="signup_tog">Login</label>
-               </span>
-            </form>
+               <button class="snap-btn" onclick="takePhoto()" title="Capture Moment"></button>
+            </div>
+            <div class="thumbnail-bar" id="thumbnail-bar"></div>
+            <div class="unified-input-group">
+               <button class="plus-icon-btn" onclick="document.getElementById('gallery-input').click()">+</button>
+               <input type="file" id="gallery-input" accept="image/*" multiple style="display:none"
+                  onchange="handleGalleryUpload(event)">
+               <textarea id="emergency-text" placeholder="Describe the crisis..."></textarea>
+               <button class="mic-icon-btn" id="mic-btn" onclick="toggleRecording()">🎤</button>
+            </div>
+            <button class="action-btn danger-btn" id="analyze-btn" onclick="runAnalysis()">Dispatch AI
+               Commander</button>
+
+            <div id="analysis-status" style="display:none; margin-top:15px;">
+               <p id="status-visual">⚪ Visual/Text Pre-processing...</p>
+               <p id="status-audio">⚪ Audio Transcription & Forensics...</p>
+               <p id="status-triage">⚪ Final Triage Decision...</p>
+            </div>
+         </div>
+         <div id="results-area" class="results-container"></div>
+      </section>
+
+      <section id="profile-section" class="glass-card" style="display:none;">
+         <div class="profile-header">
+            <h2>Medical Profile & Database</h2>
+            <button id="edit-toggle-btn" class="action-btn secondary-btn" onclick="toggleProfileEdit()">Edit
+               Profile</button>
+         </div>
+         <div class="profile-content">
+            <div id="profile-view-mode">
+               <div class="info-item"><strong>Emergency Contact:</strong> <span id="view-contact">Loading...</span>
+               </div>
+               <div class="info-item"><strong>Blood Group:</strong> <span id="view-blood">Loading...</span></div>
+               <div class="info-item"><strong>Medical History:</strong>
+                  <p id="view-notes">Loading...</p>
+               </div>
+               <div class="info-item"><strong>Live Location Tracking:</strong> <span id="view-tracking">No</span></div>
+            </div>
+            <div id="profile-edit-mode" style="display:none;">
+               <div class="profile-grid">
+                  <input type="text" id="prof-contact" placeholder="Emergency Phone">
+                  <select id="prof-blood">
+                     <option value="A+">A+</option>
+                     <option value="O+">O+</option>
+                     <option value="B+">B+</option>
+                     <option value="AB+">AB+</option>
+                  </select>
+                  <textarea id="prof-notes" placeholder="List allergies..."></textarea>
+                  <div class="btn-row">
+                     <button class="action-btn success-btn" onclick="saveProfile()">Save Changes</button>
+                     <button class="action-btn" onclick="toggleProfileEdit(false)">Cancel</button>
+                  </div>
+               </div>
+            </div>
          </div>
       </section>
    </main>
 
    <script>
-      const incidents = [
-         { location: "Japan (April 20)", description: "M7.5 earthquake in the northeast; triggered tsunami warnings", dangerous: true, category: "Seismic", severity: 5 },
-         { location: "Indonesia (April 2)", description: "M7.3 earthquake in North Sulawesi; 1 death, 5 injured", dangerous: true, category: "Seismic", severity: 5 },
-         { location: "Ethiopia (March 10)", description: "Landslides and floods in Gammo Zone; 96 lives lost, 780 households destroyed", dangerous: true, category: "Flooding", severity: 5 },
-         { location: "Afghanistan (March 25–April)", description: "Flash floods across 13 provinces; 28 deaths, thousands of livestock lost", dangerous: true, category: "Flooding", severity: 5 },
-         { location: "Solomon Islands (April 6)", description: "Tropical Cyclone Maila; Category 3, winds up to 185 km/h", dangerous: true, category: "Storm", severity: 5 },
-         { location: "USA (March 17–26)", description: "Tornado outbreak across the South; multiple fatalities and neighborhood destruction", dangerous: true, category: "Storm", severity: 5 },
-         { location: "Chile (January–February)", description: "Massive forest fires; 22 deaths, hundreds of homes burned in Valparaíso", dangerous: true, category: "Wildfire", severity: 5 },
-         { location: "Malaysia (April 22)", description: "Fire intensified by heat and wind; destroyed over 1,000 homes", dangerous: true, category: "Wildfire", severity: 4 },
-         { location: "Turkey (April)", description: "Tremors in Siirt region exacerbated building damage during flooding", dangerous: true, category: "Flooding", severity: 4 },
-         { location: "Bangladesh (March–April)", description: "Measles outbreak worsened by displacement from flood-prone areas; 118 deaths", dangerous: true, category: "Health", severity: 4 },
-         { location: "Egypt (April 26)", description: "M4.3 earthquake centered near Suez; tremors felt in Cairo", dangerous: false, category: "Seismic", severity: 2 },
-         { location: "France (January)", description: "European windstorms; caused widespread flooding and coastal erosion", dangerous: false, category: "Storm", severity: 2 }
-      ];
+      let isEditing = false;
+      let latestAnalysis = null;
+      let capturedImages = [];
+      let audioBlob = null;
+      let mediaRecorder = null;
+      let audioChunks = [];
+      let currentLat = 0, currentLng = 0;
 
-      const categoryIcons = {
-         "Seismic": "fa-earth-americas",
-         "Structural": "fa-building",
-         "Flooding": "fa-water",
-         "Storm": "fa-cloud-bolt",
-         "Wildfire": "fa-fire",
-         "Avalanche": "fa-mountain",
-         "Drought": "fa-droplet",
-         "Heat": "fa-sun",
-         "Health": "fa-hospital",
-         "Environmental": "fa-leaf",
-         "Economic": "fa-chart-line"
-      };
+      const isMobile = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-      function getSeverityLabel(severity) {
-         if (severity >= 5) return "Critical";
-         if (severity === 4) return "High";
-         if (severity === 3) return "Medium";
-         if (severity === 2) return "Low";
-         return "Info";
+      function toggleAuth(isS) {
+         document.getElementById('login-form').style.display = isS ? 'none' : 'block';
+         document.getElementById('signup-form').style.display = isS ? 'block' : 'none';
+      }
+      async function appSignup() {
+         const name = document.getElementById('sig-name').value;
+         const email = document.getElementById('sig-email').value;
+         const pass = document.getElementById('sig-pass').value;
+         const phone = document.getElementById('sig-phone').value;
+         try {
+            await CrisisAI.Auth.signup({ name, email, password: pass, phone });
+            alert("✅ Registration successful!"); toggleAuth(false);
+         } catch (e) { alert(e.message); }
+      }
+      async function appLogin() {
+         const email = document.getElementById('login-email').value;
+         const pass = document.getElementById('login-pass').value;
+         try {
+            await CrisisAI.Auth.login(email, pass);
+            showAuthenticatedUI();
+         } catch (e) { alert(e.message); }
+      }
+      function showAuthenticatedUI() {
+         document.getElementById('auth-section').style.display = 'none';
+         document.getElementById('dashboard-section').style.display = 'block';
+         document.getElementById('nav-links').style.display = 'flex';
+         const user = CrisisAI.Auth.getCurrentUser();
+         document.getElementById('user-initials').style.display = 'block';
+         document.getElementById('user-initials').innerText = user.name[0].toUpperCase();
+         startCamera();
+      }
+      function handleLogout() { CrisisAI.Auth.logout(); }
+
+      async function showSection(name) {
+         document.querySelectorAll('main > section').forEach(s => s.style.display = 'none');
+         document.getElementById(name + '-section').style.display = 'block';
+         if (name === 'profile') await loadProfileData();
+         document.querySelectorAll('.top-link').forEach(el => el.classList.remove('active'));
+         document.querySelector(`button[onclick*="${name}"]`).classList.add('active');
+      }
+      async function loadProfileData() {
+         const user = CrisisAI.Auth.getCurrentUser();
+         try {
+            const profile = await CrisisAI.User.getProfile(user.user_id || user.id);
+            document.getElementById('view-contact').innerText = profile.emergency_contact || "None";
+            document.getElementById('view-blood').innerText = profile.blood_group || "Unknown";
+            document.getElementById('view-notes').innerText = profile.medical_notes || "None";
+            document.getElementById('view-tracking').innerText = profile.allow_location_tracking ? "Yes" : "No";
+         } catch (e) { console.error(e); }
+      }
+      function toggleProfileEdit(s) {
+         isEditing = s !== undefined ? s : !isEditing;
+         document.getElementById('profile-view-mode').style.display = isEditing ? 'none' : 'block';
+         document.getElementById('profile-edit-mode').style.display = isEditing ? 'block' : 'none';
+      }
+      async function saveProfile() {
+         const user = CrisisAI.Auth.getCurrentUser();
+         const data = {
+            emergency_contact: document.getElementById('prof-contact').value,
+            blood_group: document.getElementById('prof-blood').value,
+            medical_notes: document.getElementById('prof-notes').value
+         };
+         try {
+            await CrisisAI.User.updateProfile(user.user_id || user.id, data);
+            alert("✅ Profile Synced"); await loadProfileData(); toggleProfileEdit(false);
+         } catch (e) { alert(e.message); }
       }
 
-      function renderNews(filter = 'all') {
-         const trackRtl = document.getElementById('news-track-rtl');
-         const trackLtr = document.getElementById('news-track-ltr');
-         if (!trackRtl || !trackLtr) return;
-
-         trackRtl.innerHTML = '';
-         trackLtr.innerHTML = '';
-
-         let selectedIncidents = incidents;
-         if (filter !== 'all') selectedIncidents = incidents.filter(i => i.category === filter);
-
-         const displayIncidents = selectedIncidents.slice(0, 12);
-         const topLane = displayIncidents.filter((_, idx) => idx % 2 === 0);
-         const bottomLane = displayIncidents.filter((_, idx) => idx % 2 === 1);
-
-         function buildItem(incident) {
-            const item = document.createElement('article');
-            const severityClass = incident.severity >= 4 ? 'critical' : incident.severity === 3 ? 'medium' : 'low';
-            const icon = categoryIcons[incident.category] || 'fa-circle-exclamation';
-
-            item.className = `news-item ${incident.dangerous ? 'high' : ''} severity-${severityClass}`;
-            item.innerHTML = `
-               <div class="news-item-header">
-                  <div class="news-category">
-                     <i class="fas ${icon}"></i>
-                     <span>${incident.category}</span>
-                  </div>
-                  <span class="severity-badge severity-${severityClass}">${getSeverityLabel(incident.severity)}</span>
-               </div>
-               <h3>${incident.location}</h3>
-               <p>${incident.description}</p>
-            `;
-            return item;
+      async function startCamera() {
+         try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            document.getElementById('camera-stream').srcObject = stream;
+         } catch (e) { console.warn("Camera access denied."); }
+      }
+      function takePhoto() {
+         if (capturedImages.length >= 5) return alert("Limit 5");
+         const video = document.getElementById('camera-stream');
+         const canvas = document.createElement('canvas');
+         canvas.width = 480; canvas.height = 480;
+         canvas.getContext('2d').drawImage(video, 0, 0, 480, 480);
+         canvas.toBlob(blob => {
+            const url = URL.createObjectURL(blob);
+            capturedImages.push({ url, blob });
+            renderGallery();
+         }, 'image/jpeg');
+      }
+      function handleGalleryUpload(e) {
+         for (let file of e.target.files) {
+            if (capturedImages.length >= 5) break;
+            capturedImages.push({ url: URL.createObjectURL(file), blob: file });
          }
-
-         [...topLane, ...topLane].forEach((incident) => trackRtl.appendChild(buildItem(incident)));
-         [...bottomLane, ...bottomLane].forEach((incident) => trackLtr.appendChild(buildItem(incident)));
-
-         [trackRtl, trackLtr].forEach((track) => {
-            track.classList.remove('animate');
-            void track.offsetWidth;
-            track.classList.add('animate');
-         });
+         renderGallery();
+         e.target.value = "";
       }
-
-      function setupFilterTabs() {
-         const filterBtns = document.querySelectorAll('.filter-btn');
-         filterBtns.forEach(btn => {
-            btn.addEventListener('click', function () {
-               filterBtns.forEach(b => b.classList.remove('active'));
-               this.classList.add('active');
-               renderNews(this.getAttribute('data-filter'));
-               $jsCode
-            });
-         });
+      function renderGallery() {
+         const bar = document.getElementById('thumbnail-bar');
+         bar.innerHTML = capturedImages.map((img, i) => `
+            <div class="thumb-container">
+               <img src="${img.url}" class="gallery-thumb">
+               <button class="remove-btn" onclick="removePhoto(${i})">×</button>
+            </div>
+         `).join('');
       }
-
-      window.addEventListener('DOMContentLoaded', () => {
-         // Setup for news tickers and filters
-         renderNews();
-         setupFilterTabs();
-
-         // If user is already logged in, redirect them to the main app
-         if (typeof CrisisAI !== 'undefined' && CrisisAI.Auth.isLoggedIn()) {
-            window.location.href = 'main.html';
-            return;
+      function removePhoto(i) {
+         URL.revokeObjectURL(capturedImages[i].url);
+         capturedImages.splice(i, 1);
+         renderGallery();
+      }
+      async function toggleRecording() {
+         const btn = document.getElementById('mic-btn');
+         if (mediaRecorder && mediaRecorder.state === "recording") {
+            mediaRecorder.stop(); btn.innerText = "🎤";
+         } else {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+            mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+            mediaRecorder.onstop = () => audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+            mediaRecorder.start(); btn.innerText = "⏹️";
          }
+      }
 
-         // Auth form handling
-         const signupForm = document.getElementById('signupFormAuth');
-         if (signupForm) {
-            signupForm.addEventListener('submit', async (e) => {
-               e.preventDefault();
-               const name = document.getElementById('signupNameAuth').value;
-               const email = document.getElementById('signupEmailAuth').value;
-               const password = document.getElementById('signupPasswordAuth').value;
-               const confirmPassword = document.getElementById('signupConfirmPasswordAuth').value;
+      async function runAnalysis() {
+         const btn = document.getElementById('analyze-btn');
+         const text = document.getElementById('emergency-text').value;
+         if (!text && capturedImages.length === 0 && !audioBlob) return alert("Add data to analyze.");
 
-               if (password !== confirmPassword) {
-                  alert("Passwords do not match!");
-                  return;
-               }
+         btn.innerText = "Dispatching AI Commander..."; btn.disabled = true;
+         document.getElementById('analysis-status').style.display = "block";
 
-               try {
-                  await CrisisAI.Auth.signup(name, email, password);
-                  await CrisisAI.Auth.login(email, password); // Auto-login after signup (redirects to dashboard.html)
-                  window.location.href = 'index.html'; // Redirect to index.html after signup
-               } catch (error) {
-                  alert(`Signup Failed: ${error.message}`);
-               }
-            });
+         try {
+            const primaryImg = capturedImages.length > 0 ? capturedImages[0].blob : null;
+            const response = await CrisisAI.Analysis.analyze(text, primaryImg, audioBlob);
+            latestAnalysis = response.result;
+            renderResults(latestAnalysis);
+
+            if (latestAnalysis.status_level !== 'STABLE') {
+               navigator.geolocation.getCurrentPosition(p => {
+                  currentLat = p.coords.latitude; currentLng = p.coords.longitude;
+                  CrisisAI.SOS.init(latestAnalysis, currentLat, currentLng).then(sos => enableAutoButtons());
+               });
+            }
+         } catch (e) { alert("Pipeline Error: " + e.message); }
+         finally { btn.innerText = "Dispatch AI Commander"; btn.disabled = false; }
+      }
+
+      function renderResults(data) {
+         const area = document.getElementById('results-area');
+         const statusClass = (data.status_level === 'CRITICAL') ? 'severity-critical' :
+            (data.status_level === 'URGENT') ? 'severity-urgent' : 'severity-stable';
+
+         area.innerHTML = `
+            <div class="result-card glass incident-pulse">
+               <h3 class="${statusClass}">MODE: ${data.status_level}</h3>
+               <p class="summary">"${data.situation_analysis}"</p>
+               <div class="survival-steps"><h4>Directives:</h4><ul id="steps-list"></ul></div>
+               <div class="actions-grid" id="btns-list"></div>
+               <div id="first-aid-display" class="first-aid-container glass" style="display:none; margin-top:20px; padding:15px; border:1px solid #007bff;"></div>
+            </div>
+         `;
+         (data.actionable_steps || []).forEach(s => {
+            const li = document.createElement('li'); li.innerText = s;
+            document.getElementById('steps-list').appendChild(li);
+         });
+         (data.action_buttons || []).forEach((b, i) => {
+            const box = document.createElement('div'); box.className = "action-box";
+            box.innerHTML = `<h5>${b.replace(/_/g, ' ')}</h5>
+               <div class="btn-row">
+                  <button class="manual-btn" onclick="handleManual('${b}')">Manual</button>
+                  <button class="auto-btn loading-state" disabled onclick="handleAuto('${b}')">Loading AI...</button>
+               </div>`;
+            document.getElementById('btns-list').appendChild(box);
+         });
+      }
+
+      function enableAutoButtons() {
+         document.querySelectorAll('.auto-btn').forEach(btn => {
+            btn.classList.remove('loading-state'); btn.disabled = false; btn.innerText = "AI Auto";
+         });
+      }
+
+      function handleManual(action) {
+         const normalized = action.toUpperCase().replace(/_/g, ' ');
+         if (normalized.includes('AMBULANCE')) window.location.href = `tel:102`;
+         else if (normalized.includes('POLICE')) window.location.href = `tel:100`;
+         else if (normalized.includes('FIRE')) window.location.href = `tel:101`;
+         else alert("Manual routing initiated for: " + action);
+      }
+
+      async function handleAuto(action) {
+         const normalized = action.toUpperCase().replace(/_/g, ' ');
+         if (normalized.includes('FIRST AID')) {
+            const display = document.getElementById('first-aid-display');
+            display.style.display = 'block';
+            display.innerHTML = `<h4>🛡️ AI First Aid Protocol:</h4><p style="white-space: pre-line;">${latestAnalysis.first_aid_details || 'Safety first.'}</p>`;
+            display.scrollIntoView({ behavior: 'smooth' });
+         } else {
+            try {
+               const res = await CrisisAI.SOS.executeAgentAction(action, "Current Location");
+               const msg = res.message || res.status || res.result || "Action Processed";
+               alert("🤖 Agent Action: " + msg);
+            } catch (e) { alert("Agent Error: " + e.message); }
          }
-      });
-      // Analyze button click handler
-      const analyzeBtn = document.querySelector(".analyze-btn");
-      if (analyzeBtn) {
-         analyzeBtn.addEventListener("click", () => {
-            window.location.href = "main.html";
-         });
       }
-      // New Login/Sign Up redirect button handler
-      const loginSignupRedirectBtn = document.getElementById("loginSignupRedirectBtn");
-      if (loginSignupRedirectBtn) {
-         loginSignupRedirectBtn.addEventListener("click", () => {
-            window.location.href = "index.html"; // Redirect to index.html
-         });
-      }
+
+      window.onload = () => { if (typeof CrisisAI !== 'undefined' && CrisisAI.Auth.isLoggedIn()) showAuthenticatedUI(); };
    </script>
 </body>
 

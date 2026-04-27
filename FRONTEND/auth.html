@@ -6,7 +6,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>CrisisSenseAI | Command Center</title>
    <link rel="stylesheet" href="homepage.css" />
-   <link rel="stylesheet" href="style.css">
+   <link rel="stylesheet" href="auth.css">
    <script src="api.js"></script>
    <style>
       /* Ensure the container doesn't double-pad the form */
@@ -14,14 +14,14 @@
          padding: 0 !important;
       }
 
-      /* From Uiverse.io by mahiatlinux */ 
+      /* From Uiverse.io by mahiatlinux */
       .form {
          display: flex;
          flex-direction: column;
          gap: 10px;
          background-color: #1f1f1f;
          padding: 30px;
-         width: 100%; /* Changed from 450px to 100% to keep it responsive */
+         width: 100%;
          border-radius: 20px;
          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
             Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
@@ -37,7 +37,7 @@
          align-self: flex-end;
       }
 
-      .flex-column > label {
+      .flex-column>label {
          color: #f1f1f1;
          font-weight: 600;
       }
@@ -79,7 +79,7 @@
          justify-content: space-between;
       }
 
-      .flex-row > div > label {
+      .flex-row>div>label {
          font-size: 14px;
          color: #f1f1f1;
          font-weight: 400;
@@ -121,14 +121,12 @@
          <span class="brand-mark">◆</span>
          <strong class="brand-name">CrisisSenseAI</strong>
       </div>
-      <nav class="site-nav" id="nav-links" style="display:none;">
+      <nav class="site-nav" id="nav-links">
          <button class="site-nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
-         <a href="scanner.html">Scanner</a>
          <button class="site-nav-btn" onclick="showSection('profile')">My Profile</button>
       </nav>
       <div class="site-actions">
-         <button class="profile-btn" id="user-initials" style="display:none;" onclick="handleLogout()">??</button>
-         <a class="btn btn-ghost" href="homepage.html" style="display:none;" id="logout-link">Logout</a>
+         <button class="profile-btn" href="index.html" id="user-initials" onclick="handleLogout()">Logout</button>
       </div>
    </header>
 
@@ -136,56 +134,29 @@
       <section id="auth-section" class="auth-container">
          <div id="login-form" class="form">
             <h2 style="color: #f1f1f1; text-align: center; margin-bottom: 10px;">System Authentication</h2>
-            
-            <div class="flex-column">
-               <label>Email</label>
+            <div class="flex-column"><label>Email</label></div>
+            <div class="inputForm"><input type="email" class="input" id="login-email" placeholder="Enter your Email">
             </div>
-            <div class="inputForm">
-               <input type="email" class="input" id="login-email" placeholder="Enter your Email">
-            </div>
-            
-            <div class="flex-column">
-               <label>Password</label>
-            </div>
-            <div class="inputForm">
-               <input type="password" class="input" id="login-pass" placeholder="Enter your Password">
-            </div>
-            
+            <div class="flex-column"><label>Password</label></div>
+            <div class="inputForm"><input type="password" class="input" id="login-pass"
+                  placeholder="Enter your Password"></div>
             <button class="button-submit" onclick="appLogin()">Login</button>
             <p class="p">Don't have an account? <span class="span" onclick="toggleAuth(true)">Sign Up</span></p>
          </div>
 
          <div id="signup-form" class="form" style="display:none;">
             <h2 style="color: #f1f1f1; text-align: center; margin-bottom: 10px;">Create an Account</h2>
-            
-            <div class="flex-column">
-               <label>Full Name</label>
+            <div class="flex-column"><label>Full Name</label></div>
+            <div class="inputForm"><input type="text" class="input" id="sig-name" placeholder="Enter your Full Name">
             </div>
-            <div class="inputForm">
-               <input type="text" class="input" id="sig-name" placeholder="Enter your Full Name">
+            <div class="flex-column"><label>Email</label></div>
+            <div class="inputForm"><input type="email" class="input" id="sig-email" placeholder="Enter your Email">
             </div>
-            
-            <div class="flex-column">
-               <label>Email</label>
+            <div class="flex-column"><label>Password</label></div>
+            <div class="inputForm"><input type="password" class="input" id="sig-pass" placeholder="Enter your Password">
             </div>
-            <div class="inputForm">
-               <input type="email" class="input" id="sig-email" placeholder="Enter your Email">
-            </div>
-            
-            <div class="flex-column">
-               <label>Password</label>
-            </div>
-            <div class="inputForm">
-               <input type="password" class="input" id="sig-pass" placeholder="Enter your Password">
-            </div>
-            
-            <div class="flex-column">
-               <label>Phone</label>
-            </div>
-            <div class="inputForm">
-               <input type="text" class="input" id="sig-phone" placeholder="Enter your Phone">
-            </div>
-            
+            <div class="flex-column"><label>Phone</label></div>
+            <div class="inputForm"><input type="text" class="input" id="sig-phone" placeholder="Enter your Phone"></div>
             <button class="button-submit" onclick="appSignup()">Register</button>
             <p class="p">Already have an account? <span class="span" onclick="toggleAuth(false)">Sign In</span></p>
          </div>
@@ -265,12 +236,11 @@
       let audioChunks = [];
       let currentLat = 0, currentLng = 0;
 
-      const isMobile = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
       function toggleAuth(isS) {
          document.getElementById('login-form').style.display = isS ? 'none' : 'block';
          document.getElementById('signup-form').style.display = isS ? 'block' : 'none';
       }
+
       async function appSignup() {
          const name = document.getElementById('sig-name').value;
          const email = document.getElementById('sig-email').value;
@@ -281,6 +251,7 @@
             alert("✅ Registration successful!"); toggleAuth(false);
          } catch (e) { alert(e.message); }
       }
+
       async function appLogin() {
          const email = document.getElementById('login-email').value;
          const pass = document.getElementById('login-pass').value;
@@ -289,6 +260,7 @@
             showAuthenticatedUI();
          } catch (e) { alert(e.message); }
       }
+
       function showAuthenticatedUI() {
          document.getElementById('auth-section').style.display = 'none';
          document.getElementById('dashboard-section').style.display = 'block';
@@ -298,15 +270,18 @@
          document.getElementById('user-initials').innerText = user.name[0].toUpperCase();
          startCamera();
       }
-      function handleLogout() { CrisisAI.Auth.logout(); }
+
+      function handleLogout() {
+         CrisisAI.Auth.logout();
+         window.location.href = 'index.html';
+      }
 
       async function showSection(name) {
          document.querySelectorAll('main > section').forEach(s => s.style.display = 'none');
          document.getElementById(name + '-section').style.display = 'block';
          if (name === 'profile') await loadProfileData();
-         document.querySelectorAll('.top-link').forEach(el => el.classList.remove('active'));
-         document.querySelector(`button[onclick*="${name}"]`).classList.add('active');
       }
+
       async function loadProfileData() {
          const user = CrisisAI.Auth.getCurrentUser();
          try {
@@ -317,11 +292,13 @@
             document.getElementById('view-tracking').innerText = profile.allow_location_tracking ? "Yes" : "No";
          } catch (e) { console.error(e); }
       }
+
       function toggleProfileEdit(s) {
          isEditing = s !== undefined ? s : !isEditing;
          document.getElementById('profile-view-mode').style.display = isEditing ? 'none' : 'block';
          document.getElementById('profile-edit-mode').style.display = isEditing ? 'block' : 'none';
       }
+
       async function saveProfile() {
          const user = CrisisAI.Auth.getCurrentUser();
          const data = {
@@ -335,12 +312,14 @@
          } catch (e) { alert(e.message); }
       }
 
+      // Media and Analysis Functions remain exactly as original
       async function startCamera() {
          try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
             document.getElementById('camera-stream').srcObject = stream;
          } catch (e) { console.warn("Camera access denied."); }
       }
+
       function takePhoto() {
          if (capturedImages.length >= 5) return alert("Limit 5");
          const video = document.getElementById('camera-stream');
@@ -353,6 +332,7 @@
             renderGallery();
          }, 'image/jpeg');
       }
+
       function handleGalleryUpload(e) {
          for (let file of e.target.files) {
             if (capturedImages.length >= 5) break;
@@ -361,6 +341,7 @@
          renderGallery();
          e.target.value = "";
       }
+
       function renderGallery() {
          const bar = document.getElementById('thumbnail-bar');
          bar.innerHTML = capturedImages.map((img, i) => `
@@ -370,11 +351,13 @@
             </div>
          `).join('');
       }
+
       function removePhoto(i) {
          URL.revokeObjectURL(capturedImages[i].url);
          capturedImages.splice(i, 1);
          renderGallery();
       }
+
       async function toggleRecording() {
          const btn = document.getElementById('mic-btn');
          if (mediaRecorder && mediaRecorder.state === "recording") {

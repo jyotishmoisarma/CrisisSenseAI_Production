@@ -61,7 +61,8 @@
             <form class="form_front" id="loginFormAuth">
                <p class="form-section-heading">Choose your path:</p>
                <div class="analyze-wrapper">
-                  <button type="button" class="analyze-btn" id="analyzeDirectBtn">Analyze Directly</button>
+                  <button type="button" class="analyze-btn" id="analyzeDirectBtn"
+                     onclick="window.location.href='auth.html'">Analyze Directly</button>
                </div>
                <button type="button" class="btn" id="loginSignupRedirectBtn">Login / Sign Up</button>
             </form>
@@ -83,7 +84,6 @@
    </main>
 
    <script>
-      // FULL INCIDENT DATA RESTORED
       const incidents = [
          { location: "Japan (April 20)", description: "M7.5 earthquake in the northeast; triggered tsunami warnings", dangerous: true, category: "Seismic", severity: 5 },
          { location: "Indonesia (April 2)", description: "M7.3 earthquake in North Sulawesi; 1 death, 5 injured", dangerous: true, category: "Seismic", severity: 5 },
@@ -151,7 +151,6 @@
             return item;
          }
 
-         // Populate both lanes
          selectedIncidents.forEach(inc => {
             trackRtl.appendChild(buildItem(inc));
             trackLtr.appendChild(buildItem(inc));
@@ -173,12 +172,7 @@
          renderNews();
          setupFilterTabs();
 
-         // Auto-redirect if already logged in
-         if (typeof CrisisAI !== 'undefined' && CrisisAI.Auth.isLoggedIn()) {
-            window.location.href = 'index.html';
-         }
-
-         // Signup form handling
+         // Signup form handling - Redirect to auth.html
          const signupForm = document.getElementById('signupFormAuth');
          if (signupForm) {
             signupForm.addEventListener('submit', async (e) => {
@@ -193,19 +187,14 @@
                try {
                   await CrisisAI.Auth.signup({ name, email, password, phone: "N/A" });
                   await CrisisAI.Auth.login(email, password);
-                  window.location.href = 'index.html';
+                  window.location.href = 'auth.html';
                } catch (error) {
                   alert(`Signup Failed: ${error.message}`);
                }
             });
          }
 
-         // Redirect Button Handlers
-         const analyzeDirectBtn = document.getElementById("analyzeDirectBtn");
-         if (analyzeDirectBtn) {
-            analyzeDirectBtn.addEventListener("click", () => { window.location.href = "index.html"; });
-         }
-
+         // Redirect Button Handlers - Point to auth.html
          const loginSignupRedirectBtn = document.getElementById("loginSignupRedirectBtn");
          if (loginSignupRedirectBtn) {
             loginSignupRedirectBtn.addEventListener("click", () => { window.location.href = "auth.html"; });
